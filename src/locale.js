@@ -1,8 +1,5 @@
 /* eslint-disable no-template-curly-in-string */
 import printValue from './util/printValue';
-import { getLocale } from './customLocale';
-
-const customLocale = getLocale();
 
 export const mixed = {
   default: '${path} is invalid',
@@ -21,7 +18,6 @@ export const mixed = {
 
     return msg;
   },
-  ...customLocale.mixed,
 };
 
 export const string = {
@@ -34,7 +30,6 @@ export const string = {
   trim: '${path} must be a trimmed string',
   lowercase: '${path} must be a lowercase string',
   uppercase: '${path} must be a upper case string',
-  ...customLocale.string,
 };
 
 export const number = {
@@ -43,28 +38,23 @@ export const number = {
   positive: '${path} must be a positive number',
   negative: '${path} must be a negative number',
   integer: '${path} must be an integer',
-  ...customLocale.number,
 };
 
 export const date = {
   min: '${path} field must be later than ${min}',
   max: '${path} field must be at earlier than ${max}',
-  ...customLocale.date,
 };
 
 export const boolean = {
-  ...customLocale.boolean,
 };
 
 export const object = {
   noUnknown: '${path} field cannot have keys not specified in the object shape',
-  ...customLocale.object,
 };
 
 export const array = {
   min: '${path} field must have at least ${min} items',
   max: '${path} field must have less than ${max} items',
-  ...customLocale.array,
 };
 
 export default {
