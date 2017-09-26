@@ -153,14 +153,14 @@ schema.cast({
 Allows you to customize the default messages used by Yup, when no message is provided with a validation test.
 If any message is missing in the custom dictionary the error message will default to Yup's one.
 ```js
-import { setLocale } from 'yup/lib/customLocale'
+import setLocale from 'yup/lib/customLocale'
 
 setLocale({
   mixed: {
     default: 'Não é válido',
   },
   number: {
-    max: 'Deve ser maior que ${min}',
+    min: 'Deve ser maior que ${min}',
   },
 })
 
@@ -169,7 +169,7 @@ const schema = yup.object().shape({
   name: yup.string(),
   age: yup.number().min(18),
 })
-schema.validate({ name: 'jimmy', age: 'hi' })
+schema.validate({ name: 'jimmy', age: 11 })
   .catch(function(err){
     err.name   // 'ValidationError'
     err.errors // => ['Deve ser maior que 18']
