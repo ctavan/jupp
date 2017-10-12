@@ -5,14 +5,17 @@
   "main": "lib/index.js",
   "scripts": {
     "benchmark": "babel-node benchmark/index.js",
-    "jest": "jest",
-    "test": "yarn run lint && yarn run jest",
-    "tdd": "jest --watchAll",
-    "lint": "eslint .",
+    "build": "babel src --out-dir lib",
     "clean": "rimaf ./lib/*",
-    "toc": "doctoc README.md --github",
-    "build": "babel src --out-dir lib && yarn run toc",
-    "release": "release"
+    "precommit": "lint-staged",
+    "commit": "git-cz",
+    "jest": "jest",
+    "lint": "eslint .",
+    "prepublish": "yarn run build",
+    "semantic-release": "semantic-release pre && npm publish && semantic-release post",
+    "tdd": "jest --watchAll",
+    "test": "yarn run lint && yarn run jest",
+    "toc": "doctoc README.md --github"
   },
   "files": [
     "lib"
@@ -37,6 +40,12 @@
       "helpers\\.js"
     ]
   },
+  "lint-staged": {
+    "*.js": [
+      "yarn run toc",
+      "git add"
+    ]
+  },
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-eslint": "^8.0.1",
@@ -47,6 +56,8 @@
     "benchmark": "^2.0.0",
     "chai": "^4.1.2",
     "chai-as-promised": "^7.1.1",
+    "commitizen": "^2.9.6",
+    "cz-conventional-changelog": "^2.0.0",
     "dirty-chai": "^2.0.1",
     "doctoc": "^1.0.0",
     "eslint": "^4.8.0",
@@ -54,10 +65,11 @@
     "eslint-plugin-import": "^2.7.0",
     "eslint-plugin-jsx-a11y": "^6.0.2",
     "eslint-plugin-react": "^7.4.0",
+    "husky": "^0.14.3",
     "jest": "^21.2.1",
-    "mt-changelog": "^0.6.2",
+    "lint-staged": "^4.2.3",
     "promises-aplus-tests": "^2.1.2",
-    "release-script": "^1.0.2",
+    "semantic-release": "^8.0.3",
     "sinon": "^4.0.0",
     "sinon-chai": "^2.14.0"
   },
@@ -68,7 +80,9 @@
     "toposort": "^1.0.4",
     "type-name": "^2.0.1"
   },
-  "release-script": {
-    "defaultDryRun": "false"
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
   }
 }
