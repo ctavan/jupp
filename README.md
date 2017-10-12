@@ -1,5 +1,7 @@
 # Jupp
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/ctavan/jupp.svg)](https://greenkeeper.io/)
+
 Jupp started as a fork from https://github.com/jquense/yup and added, as a first major improvement,
 support for sync validations.
 
