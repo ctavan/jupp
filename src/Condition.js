@@ -23,9 +23,7 @@ class Conditional {
       }
 
       if (!options.then && !options.otherwise) {
-        throw new TypeError(
-          'either `then:` or `otherwise:` is required for `when()` conditions',
-        );
+        throw new TypeError('either `then:` or `otherwise:` is required for `when()` conditions');
       }
 
       const isFn = typeof is === 'function'

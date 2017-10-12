@@ -1,10 +1,6 @@
 import isFunction from 'lodash/isFunction';
 import isSymbol from 'lodash/isSymbol';
 
-const toString = Object.prototype.toString;
-const toISOString = Date.prototype.toISOString;
-const errorToString = Error.prototype.toString;
-const regExpToString = RegExp.prototype.toString;
 const symbolToString = Symbol.prototype.toString;
 
 const SYMBOL_REGEXP = /^Symbol\((.*)\)(.*)$/;
@@ -26,7 +22,7 @@ function printSymbol(val) {
 }
 
 function printError(val) {
-  return `[${errorToString.call(val)}]`;
+  return `[${Error.prototype.toString.call(val)}]`;
 }
 
 function printSimpleValue(val, quoteStrings = false) {
@@ -41,10 +37,18 @@ function printSimpleValue(val, quoteStrings = false) {
   if (isFunction(val)) return printFunction(val);
   if (isSymbol(val)) return printSymbol(val);
 
-  const tag = toString.call(val);
-  if (tag === '[object Date]') return isNaN(val.getTime()) ? String(val) : toISOString.call(val);
-  if (tag === '[object Error]' || val instanceof Error) return printError(val);
-  if (tag === '[object RegExp]') return regExpToString.call(val);
+  const tag = Object.prototype.toString.call(val);
+  if (tag === '[object Date]') {
+    return Number.isNaN(Number(val.getTime())) ?
+      String(val) :
+      Date.prototype.toISOString.call(val);
+  }
+  if (tag === '[object Error]' || val instanceof Error) {
+    return printError(val);
+  }
+  if (tag === '[object RegExp]') {
+    return RegExp.prototype.toString.call(val);
+  }
 
   return null;
 }

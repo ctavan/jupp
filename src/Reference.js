@@ -36,7 +36,7 @@ export default class Reference {
   }
 
   getValue(parent, context) {
-    const isContext = this.isContext;
+    const { isContext } = this;
     const value = this._get(isContext ? context : (parent || context) || {});
     return this.map(value);
   }

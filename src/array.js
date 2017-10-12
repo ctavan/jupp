@@ -54,7 +54,7 @@ inherits(ArraySchema, MixedSchema, {
 
   _validate(_value, options = {}) {
     const errors = [];
-    const path = options.path;
+    const { path } = options;
     const subType = this._subType;
     const abortEarly = this._option('abortEarly', options);
     const recursive = this._option('recursive', options);
@@ -106,10 +106,8 @@ inherits(ArraySchema, MixedSchema, {
     const next = this.clone();
 
     if (schema !== false && !isSchema(schema)) {
-      throw new TypeError(
-        `${'`array.of()` sub-schema must be a valid jupp schema, or `false` to negate a current sub-schema. ' +
-        'not: '}${typeName(schema)}`,
-      );
+      throw new TypeError(`${'`array.of()` sub-schema must be a valid jupp schema, or `false` to negate a current sub-schema. ' +
+        'not: '}${typeName(schema)}`);
     }
 
     next._subType = schema;

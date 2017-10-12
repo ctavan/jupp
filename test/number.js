@@ -42,12 +42,10 @@ describe('Number types', () => {
       schema.round('ceIl').cast(45.1111).should.equal(46);
       schema.round().cast(45.444444).should.equal(45);
 
-      expect(
-        schema.nullable()
-          .integer()
-          .round()
-          .cast(null),
-      ).to.equal(null);
+      expect(schema.nullable()
+        .integer()
+        .round()
+        .cast(null)).to.equal(null);
 
       (function test() { schema.round('fasf'); }).should.throw(TypeError);
     });
@@ -57,11 +55,9 @@ describe('Number types', () => {
     });
 
     it('should return NaN for failed casts', () => {
-      expect(
-        number().cast('asfasf', { assert: false })).to.eql(NaN);
+      expect(number().cast('asfasf', { assert: false })).to.eql(NaN);
 
-      expect(
-        number().cast(null, { assert: false })).to.eql(NaN);
+      expect(number().cast(null, { assert: false })).to.eql(NaN);
     });
   });
 

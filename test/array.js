@@ -12,11 +12,9 @@ describe('Array types', () => {
     });
 
     it('should return null for failed casts', () => {
-      expect(
-        array().cast('asfasf', { assert: false })).to.equal(null);
+      expect(array().cast('asfasf', { assert: false })).to.equal(null);
 
-      expect(
-        array().cast(null, { assert: false })).to.equal(null);
+      expect(array().cast(null, { assert: false })).to.equal(null);
     });
 
     it('should recursively cast fields', () => {
@@ -49,8 +47,7 @@ describe('Array types', () => {
     inst.isType(NaN).should.equal(false);
     inst.isType(34545).should.equal(false);
 
-    expect(
-      inst.isType(null)).to.equal(false);
+    expect(inst.isType(null)).to.equal(false);
 
     inst.nullable().isType(null).should.equal(true);
   });
@@ -62,25 +59,19 @@ describe('Array types', () => {
   });
 
   it('should concat subType correctly', () => {
-    expect(
-      array()
-        .of(number())
-        .concat(array())
-        ._subType,
-    ).to.exist();
+    expect(array()
+      .of(number())
+      .concat(array())
+      ._subType).to.exist();
 
-    expect(
-      array()
-        .of(number())
-        .concat(array().of(false))
-        ._subType,
-    ).to.equal(false);
+    expect(array()
+      .of(number())
+      .concat(array().of(false))
+      ._subType).to.equal(false);
   });
 
   it('should pass options to children', () => {
-    array(
-      object({ name: string() }),
-    )
+    array(object({ name: string() }))
       .cast([{ id: 1, name: 'john' }], { stripUnknown: true })
       .should.eql([{ name: 'john' }]);
   });

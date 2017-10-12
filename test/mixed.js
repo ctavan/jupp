@@ -11,7 +11,7 @@ describe('Mixed Types ', () => {
   it('should be immutable', () => {
     const inst = mixed();
     inst.sub = mixed();
-    const sub = inst.sub;
+    const { sub } = inst;
 
     let next;
     inst.should.not.equal(next = inst.required());
@@ -194,7 +194,9 @@ describe('Mixed Types ', () => {
 
   it('should respect exclusive validation', () => {
     let inst = mixed()
-      .test({ message: 'invalid', exclusive: true, name: 'test', test: () => {} })
+      .test({
+        message: 'invalid', exclusive: true, name: 'test', test: () => {},
+      })
       .test({ message: 'also invalid', name: 'test', test: () => {} });
 
     inst.tests.length.should.equal(1);
@@ -217,14 +219,18 @@ describe('Mixed Types ', () => {
   it('should replace existing tests, with exclusive test ', () => {
     const inst = mixed()
       .test({ name: 'test', message: ' ', test: noop })
-      .test({ name: 'test', exclusive: true, message: ' ', test: noop });
+      .test({
+        name: 'test', exclusive: true, message: ' ', test: noop,
+      });
 
     inst.tests.length.should.equal(1);
   });
 
   it('should replace existing exclusive tests, with non-exclusive', () => {
     const inst = mixed()
-      .test({ name: 'test', exclusive: true, message: ' ', test: () => {} })
+      .test({
+        name: 'test', exclusive: true, message: ' ', test: () => {},
+      })
       .test({ name: 'test', message: ' ', test: () => {} })
       .test({ name: 'test', message: ' ', test: () => {} });
 
@@ -248,7 +254,9 @@ describe('Mixed Types ', () => {
     (await inst.isValid(8)).should.equal(false);
 
     (await inst
-      .test({ message: 'invalid', exclusive: true, name: 'max', test: v => v < 10 })
+      .test({
+        message: 'invalid', exclusive: true, name: 'max', test: v => v < 10,
+      })
       .isValid(8)
     ).should.equal(true);
   });
@@ -313,8 +321,7 @@ describe('Mixed Types ', () => {
   it('should allow custom validation', async () => {
     const inst = string()
       .test('name', 'test a', val =>
-        Promise.resolve(val === 'jim'),
-      );
+        Promise.resolve(val === 'jim'));
 
     return inst.validate('joe').should.be.rejected().then((e) => {
       e.errors[0].should.equal('test a');
@@ -352,9 +359,8 @@ describe('Mixed Types ', () => {
     it('should validate correctly', async () => {
       await inst
         .isValid({ str: 'hi', str2: 'hi', obj: {} })
-        .should.become(true)
-
-      ;(await next
+        .should.become(true);
+      (await next
         .validate({ str: ' hi  ', str2: 'hi', obj: { str: 'hi' } })
         .should.be.fulfilled())
         .should.deep.eql({ str: 'hi', str2: 'hi', obj: { str: 'hi' } });
@@ -394,8 +400,7 @@ describe('Mixed Types ', () => {
   it('concat should maintain undefined defaults', () => {
     const inst = string().default('hi');
 
-    expect(
-      inst.concat(string().default(undefined)).default()).to.equal(undefined);
+    expect(inst.concat(string().default(undefined)).default()).to.equal(undefined);
   });
 
   it('defaults should be validated but not transformed', () => {

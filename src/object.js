@@ -27,7 +27,8 @@ function unknown(ctx, value) {
 export default function ObjectSchema(spec) {
   if (!(this instanceof ObjectSchema)) { return new ObjectSchema(spec); }
 
-  MixedSchema.call(this, { type: 'object',
+  MixedSchema.call(this, {
+    type: 'object',
     default() {
       const dft = transform(this._nodes, (obj, key) => {
         obj[key] = this.fields[key].default
@@ -74,7 +75,7 @@ inherits(ObjectSchema, MixedSchema, {
 
     if (!this._typeCheck(value)) { return value; }
 
-    const fields = this.fields;
+    const { fields } = this;
     const strip = this._option('stripUnknown', options) === true;
     const extra = Object.keys(value).filter(v => this._nodes.indexOf(v) === -1);
     const props = this._nodes.concat(extra);
@@ -241,8 +242,7 @@ inherits(ObjectSchema, MixedSchema, {
 
   transformKeys(fn) {
     return this.transform(obj => obj &&
-      mapKeys(obj, (_, key) => fn(key)),
-    );
+      mapKeys(obj, (_, key) => fn(key)));
   },
 
   camelCase() {
