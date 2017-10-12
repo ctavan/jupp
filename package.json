@@ -5,12 +5,14 @@
   "main": "lib/index.js",
   "scripts": {
     "benchmark": "babel-node benchmark/index.js",
-    "build": "babel src --out-dir lib && yarn run toc",
+    "build": "babel src --out-dir lib",
     "clean": "rimaf ./lib/*",
     "precommit": "lint-staged",
     "commit": "git-cz",
     "jest": "jest",
     "lint": "eslint .",
+    "prepublish": "yarn run build",
+    "semantic-release": "semantic-release pre && npm publish && semantic-release post",
     "tdd": "jest --watchAll",
     "test": "yarn run lint && yarn run jest",
     "toc": "doctoc README.md --github"
