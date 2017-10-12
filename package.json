@@ -58,6 +58,7 @@
     "eslint-plugin-react": "^7.4.0",
     "jest": "^21.2.1",
     "promises-aplus-tests": "^2.1.2",
+    "semantic-release": "^8.0.3",
     "sinon": "^4.0.0",
     "sinon-chai": "^2.14.0"
   },
