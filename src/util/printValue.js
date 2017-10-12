@@ -1,7 +1,9 @@
 import isFunction from 'lodash/isFunction';
 import isSymbol from 'lodash/isSymbol';
 
-const symbolToString = Symbol.prototype.toString;
+const symbolToString = typeof Symbol !== 'undefined' ?
+  Symbol.prototype.toString :
+  () => '';
 
 const SYMBOL_REGEXP = /^Symbol\((.*)\)(.*)$/;
 

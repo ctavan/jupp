@@ -1,4 +1,6 @@
 /* eslint-disable no-param-reassign */
+import isString from 'lodash/isString';
+
 import inherits from './util/inherits';
 import MixedSchema from './mixed';
 import { mixed, string as locale } from './locale';
@@ -84,19 +86,21 @@ inherits(StringSchema, MixedSchema, {
   },
 
   matches(regex, options = {}) {
-    let excludeEmptyString = false;
-    let message;
+    const optionsObject = isString(options) ? {} : options;
+    const defaultMessage = isString(options) ? options : '';
+    const defaultOptions = {
+      excludeEmptyString: false,
+      message: defaultMessage,
+    };
 
-    if (options.message || Object.prototype.hasOwnProperty.call(options, 'excludeEmptyString')) {
-      ({ excludeEmptyString, message } = options);
-    } else { message = options; }
+    const { excludeEmptyString, message } = { ...defaultOptions, ...optionsObject };
 
     return this.test({
       message: message || locale.matches,
       params: { regex },
       test: value => (
         isAbsent(value) ||
-        (value === '' && excludeEmptyString) ||
+        (value === '' && !excludeEmptyString) ||
         regex.test(value)
       ),
     });

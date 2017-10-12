@@ -112,19 +112,43 @@ describe('String types', () => {
   it('MATCHES should include empty strings', () => {
     const v = string().matches(/(hi|bye)/);
 
-    return v.isValid('').should.eventually().equal(false);
+    return v.isValid('').should.eventually().equal(true);
   });
 
   it('MATCHES should exclude empty strings', () => {
     const v = string().matches(/(hi|bye)/, { excludeEmptyString: true });
 
-    return v.isValid('').should.eventually().equal(true);
+    return v.isValid('').should.eventually().equal(false);
+  });
+
+  it('MATCHES should populate the error message', async () => {
+    const v = string().matches(/(hi|bye)/);
+
+    const error = await v.validate('cats').should.be.rejected();
+
+    expect(error.message).to.match(/must match the following/);
+  });
+
+  it('MATCHES should populate the error message when passed as string', async () => {
+    const v = string().matches(/(hi|bye)/, 'Some custom error');
+
+    const error = await v.validate('cats').should.be.rejected();
+
+    expect(error.message).to.match(/Some custom error/);
+  });
+
+  it('MATCHES should populate the error message when passed as options.message', async () => {
+    const v = string().matches(/(hi|bye)/, { message: 'Another custom error' });
+
+    const error = await v.validate('cats').should.be.rejected();
+
+    expect(error.message).to.match(/Another custom error/);
   });
 
   it('EMAIL should exclude empty strings', () => {
     const v = string().email();
 
-    return v.isValid('').should.eventually().equal(true);
+    return v.isValid('').should.eventually().equal(false);
   });
 
   it('should check MIN correctly', () => {
