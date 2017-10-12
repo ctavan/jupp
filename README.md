@@ -1,20 +1,22 @@
+# Jupp
 
-Yup
-=======================
+Jupp started as a fork from https://github.com/jquense/yup and added, as a first major improvement,
+support for sync validations.
 
-Forked from https://github.com/jquense/yup
+The rest of this README is still pretty much a copy of the original README and will be updated over
+time.
 
-Yup is a JavaScript object schema validator and object parser. The API and style is ~~stolen~~ heavily inspired
+----
+
+Jupp is a JavaScript object schema validator and object parser. The API and style is ~~stolen~~ heavily inspired
 by [Joi](https://github.com/hapijs/joi), which is an amazing library but is generally too large and difficult
-to package for use in a browser. Yup is a leaner in the same spirit without some of the fancy features.
+to package for use in a browser. Jupp is a leaner in the same spirit without some of the fancy features.
 You can use it on the server as well, but in that case you might as well just use Joi.
 
-Yup is also a good bit less opinionated than joi, allowing for custom transformations and async validation.
+Jupp is also a good bit less opinionated than joi, allowing for custom transformations and async validation.
 It also allows "stacking" conditions via `when` for properties that depend on more than one other sibling or
-child property. Yup separates the parsing and validating functions into separate steps so it can be used to parse
+child property. Jupp separates the parsing and validating functions into separate steps so it can be used to parse
 json separate from validating it, via the `cast` method.
-
-**Try it out:** https://runkit.com/jquense/yup#
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -24,11 +26,11 @@ json separate from validating it, via the `cast` method.
 - [Usage](#usage)
   - [Using a custom locale dictionary](#using-a-custom-locale-dictionary)
 - [API](#api)
-  - [`yup`](#yup)
-    - [`yup.reach(schema: Schema, path: string, value: ?object, context: ?object): Schema`](#yupreachschema-schema-path-string-value-object-context-object-schema)
-    - [`yup.addMethod(schemaType: Schema, name: string, method: ()=> Schema): void`](#yupaddmethodschematype-schema-name-string-method--schema-void)
-    - [`yup.ref(path: string, options: { contextPrefix: string }): Ref`](#yuprefpath-string-options--contextprefix-string--ref)
-    - [`yup.lazy((value: any) => Schema): Lazy`](#yuplazyvalue-any--schema-lazy)
+  - [`jupp`](#jupp)
+    - [`jupp.reach(schema: Schema, path: string, value: ?object, context: ?object): Schema`](#juppreachschema-schema-path-string-value-object-context-object-schema)
+    - [`jupp.addMethod(schemaType: Schema, name: string, method: ()=> Schema): void`](#juppaddmethodschematype-schema-name-string-method--schema-void)
+    - [`jupp.ref(path: string, options: { contextPrefix: string }): Ref`](#jupprefpath-string-options--contextprefix-string--ref)
+    - [`jupp.lazy((value: any) => Schema): Lazy`](#jupplazyvalue-any--schema-lazy)
     - [`ValidationError(errors: string | Array<string>, value: any, path: string)`](#validationerrorerrors-string--arraystring-value-any-path-string)
   - [mixed](#mixed)
     - [`mixed.clone(): Schema`](#mixedclone-schema)
@@ -100,10 +102,10 @@ json separate from validating it, via the `cast` method.
 ## Install
 
 ```sh
-npm install -S yup
+npm install -S jupp
 ```
 
-Yup always relies on the `Promise` global object to handle asynchronous values as well `Set`.
+Jupp always relies on the `Promise` global object to handle asynchronous values as well `Set`.
 For browsers that do not support these, you'll need to include a polyfill, such as core-js:
 
 ```js
@@ -115,17 +117,17 @@ import 'core-js/es6/set';
 
 You define and create schema objects. Schema objects are immutable, so each call of a method returns a _new_ schema object.
 
-__try it out using tonicdev! https://tonicdev.com/570c52590a85f71200eb09ba/yup__
+__try it out using tonicdev! https://tonicdev.com/570c52590a85f71200eb09ba/jupp__
 
 ```js
-var yup = require('yup')
+var jupp = require('jupp')
 
-var schema = yup.object().shape({
-  name:      yup.string().required(),
-  age:       yup.number().required().positive().integer(),
-  email:     yup.string().email(),
-  website:   yup.string().url(),
-  createdOn: yup.date().default(function() {
+var schema = jupp.object().shape({
+  name:      jupp.string().required(),
+  age:       jupp.number().required().positive().integer(),
+  email:     jupp.string().email(),
+  website:   jupp.string().url(),
+  createdOn: jupp.date().default(function() {
     return new Date
   })
 })
@@ -150,10 +152,10 @@ schema.cast({
 ```
 
 ### Using a custom locale dictionary
-Allows you to customize the default messages used by Yup, when no message is provided with a validation test.
-If any message is missing in the custom dictionary the error message will default to Yup's one.
+Allows you to customize the default messages used by Jupp, when no message is provided with a validation test.
+If any message is missing in the custom dictionary the error message will default to Jupp's one.
 ```js
-import setLocale from 'yup/lib/customLocale'
+import setLocale from 'jupp/lib/customLocale'
 
 setLocale({
   mixed: {
@@ -164,10 +166,10 @@ setLocale({
   },
 })
 
-// Now use Yup schemas AFTER you defined your custom dicionary
-const schema = yup.object().shape({
-  name: yup.string(),
-  age: yup.number().min(18),
+// Now use Jupp schemas AFTER you defined your custom dicionary
+const schema = jupp.object().shape({
+  name: jupp.string(),
+  age: jupp.number().min(18),
 })
 schema.validate({ name: 'jimmy', age: 11 })
   .catch(function(err){
@@ -178,29 +180,29 @@ schema.validate({ name: 'jimmy', age: 11 })
 
 ## API
 
-### `yup`
+### `jupp`
 
 The module export.
 
 ```js
-var yup = require('yup')
+var jupp = require('jupp')
 
-yup.mixed
-yup.string
-yup.number
-yup.boolean // also aliased as yup.bool
-yup.date
-yup.object
-yup.array
+jupp.mixed
+jupp.string
+jupp.number
+jupp.boolean // also aliased as jupp.bool
+jupp.date
+jupp.object
+jupp.array
 
-yup.reach
-yup.addMethod
-yup.ValidationError
+jupp.reach
+jupp.addMethod
+jupp.ValidationError
 ```
 
-#### `yup.reach(schema: Schema, path: string, value: ?object, context: ?object): Schema`
+#### `jupp.reach(schema: Schema, path: string, value: ?object, context: ?object): Schema`
 
-For nested schema's `yup.reach` will retrieve a nested schema based on the provided path.
+For nested schema's `jupp.reach` will retrieve a nested schema based on the provided path.
 
 For nested schema that need to resolve dynamically, you can provide a `value` and optionally
 a `context` object.
@@ -220,12 +222,12 @@ reach(schema, 'nested.arr[1].num')
 reach(schema, 'nested["arr"][1].num')
 ```
 
-#### `yup.addMethod(schemaType: Schema, name: string, method: ()=> Schema): void`
+#### `jupp.addMethod(schemaType: Schema, name: string, method: ()=> Schema): void`
 
 Adds a new method to the core schema types. A friendlier convenience method for `schemaType.prototype[name] = method`.
 
 ```js
-  yup.addMethod(yup.date, 'format', function(formats, parseStrict) {
+  jupp.addMethod(jupp.date, 'format', function(formats, parseStrict) {
 
     return this.transform(function(value, originalValue){
 
@@ -238,7 +240,7 @@ Adds a new method to the core schema types. A friendlier convenience method for 
   })
 ```
 
-#### `yup.ref(path: string, options: { contextPrefix: string }): Ref`
+#### `jupp.ref(path: string, options: { contextPrefix: string }): Ref`
 
 Creates a reference to another sibling or sibling descendant field. Ref's are resolved
 at _validation/cast time_ and supported where specified. Ref's are evaluated in in the proper order so that
@@ -257,7 +259,7 @@ inst.cast({ foo: { bar: 'boom' } }, { context: { x: 5 } })
 // { baz: 'boom',  x: 5, { foo: { bar: 'boom' } }, }
 ```
 
-#### `yup.lazy((value: any) => Schema): Lazy`
+#### `jupp.lazy((value: any) => Schema): Lazy`
 
 creates a schema that is evaluated at validation/cast time. Useful for creating
 recursive schema like Trees, for polymophic fields and arrays.
@@ -268,12 +270,12 @@ to `undefined` on the child otherwise the object will infinitely nest itself whe
 ```js
 var node = object({
   id: number(),
-  child: yup.lazy(() =>
+  child: jupp.lazy(() =>
     node.default(undefined)
   )
 })
 
-let renderable = yup.lazy(value => {
+let renderable = jupp.lazy(value => {
   switch (typeof value) {
     case 'number':
       return number()
@@ -302,7 +304,7 @@ Thrown on failed validations, with the following properties
 Creates a schema that matches all types. All types inherit from this base type
 
 ```javascript
-var schema = yup.mixed();
+var schema = jupp.mixed();
 schema.isValid(undefined, function(valid){
   valid //=> true
 })
@@ -460,13 +462,13 @@ for objects and arrays. To avoid this overhead you can also pass a function that
 Note that `null` is considered a separate non-empty value.
 
 ```js
-  yup.string.default('nothing');
+  jupp.string.default('nothing');
 
-  yup.object.default({ number: 5}); // object will be cloned every time a default is needed
+  jupp.object.default({ number: 5}); // object will be cloned every time a default is needed
 
-  yup.object.default(() => ({ number: 5})); // this is cheaper
+  jupp.object.default(() => ({ number: 5})); // this is cheaper
 
-  yup.date.default(() => new Date()); //also helpful for defaults that change over time
+  jupp.date.default(() => new Date()); //also helpful for defaults that change over time
 
 ```
 
@@ -495,7 +497,7 @@ Whitelist a set of values. Values added are automatically removed from any black
 The `${values}` interpolation can be used in the `message` argument.
 
 ```javascript
-var schema = yup.mixed().oneOf(['jimmy', 42]);
+var schema = jupp.mixed().oneOf(['jimmy', 42]);
 schema.isValid(42)       //=> true
 schema.isValid('jimmy')  //=> true
 schema.isValid(new Date) //=> false
@@ -507,7 +509,7 @@ Blacklist a set of values. Values added are automatically removed from any white
 The `${values}` interpolation can be used in the `message` argument.
 
 ```javascript
-var schema = yup.mixed().notOneOf(['jimmy', 42]);
+var schema = jupp.mixed().notOneOf(['jimmy', 42]);
 schema.isValid(42)       //=> false
 schema.isValid(new Date) //=> true
 ```
@@ -525,13 +527,13 @@ Like joi you can also prefix properties with `$` to specify a property that is d
 on `context` passed in by `validate()` or `isValid`. `when` conditions are additive.
 
 ```javascript
-var inst = yup.object({
-      isBig: yup.boolean(),
-      count: yup.number()
+var inst = jupp.object({
+      isBig: jupp.boolean(),
+      count: jupp.number()
         .when('isBig', {
           is: true,  // alternatively: (val) => val == true
-          then:      yup.number().min(5),
-          otherwise: yup.number().min(0)
+          then:      jupp.number().min(5),
+          otherwise: jupp.number().min(0)
         })
         .when('$other', (other, schema) => other === 4
           ? schema.max(6)
@@ -544,14 +546,14 @@ inst.validate(value, { context: { other: 4 }})
 You can also specify more than one dependent key, in which case each value will be spread as an argument.
 
 ```javascript
-var inst = yup.object({
-      isSpecial: yup.bool()
-      isBig: yup.bool(),
-      count: yup.number()
+var inst = jupp.object({
+      isSpecial: jupp.bool()
+      isBig: jupp.bool(),
+      count: jupp.number()
         .when(['isBig', 'isSpecial'], {
           is: true,  // alternatively: (isBig, isSpecial) => isBig && isSpecial
-          then:      yup.number().min(5),
-          otherwise: yup.number().min(0)
+          then:      jupp.number().min(5),
+          otherwise: jupp.number().min(0)
         })
     })
 
@@ -566,9 +568,9 @@ Alternatively you can provide a function the returns a schema
 (called with the value of the key and the current schema).
 
 ```js
-var inst = yup.object({
-      isBig: yup.boolean(),
-      count: yup.number()
+var inst = jupp.object({
+      isBig: jupp.boolean(),
+      count: jupp.number()
         .when('isBig', (isBig, schema) => {
           return isBig ? schema.min(5) : schema.min(0)
         })
@@ -597,11 +599,11 @@ the `test` function is called with the current `value`. For more advanced valida
 use the alternate signature to provide more options (see below):
 
 ```js
-var jimmySchema = yup.string()
+var jimmySchema = jupp.string()
   .test('is-jimmy', '${path} is not Jimmy', value => value === 'jimmy');
 
 // or make it async by returning a promise
-var asyncJimmySchema = yup.string()
+var asyncJimmySchema = jupp.string()
   .test('is-jimmy', '${path} is not Jimmy', function (value){
     return fetch('/is-jimmy/' + value)
       .then(response => response.responseText === 'true')
@@ -652,7 +654,7 @@ If an exclusive test is added to a schema with non-exclusive tests of the same n
 the previous tests are removed and further tests of the same name will replace each other.
 
 ```javascript
-var schema = yup.mixed().test({
+var schema = jupp.mixed().test({
       name: 'max',
       exclusive: true,
       params: { max },
@@ -672,7 +674,7 @@ not to mutate the passed in value.__ Transforms are run sequentially so each `va
 current state of the cast, you can use the `originalValue` param if you need to work on the raw initial value.
 
 ```javascript
-var schema = yup.string().transform(function(currentValue, originalvalue){
+var schema = jupp.string().transform(function(currentValue, originalvalue){
   return this.isType(value) && value !== null
     ? value.toUpperCase()
     : value
@@ -686,7 +688,7 @@ you may want to adjust or refine the default behavior. For example, if you wante
 date parsing strategy than the default one you could do that with a transform.
 
 ```js
-yup.date().transform(function(formats = 'MMM dd, yyyy'){
+jupp.date().transform(function(formats = 'MMM dd, yyyy'){
   //check to see if the previous transform already parsed the date
   if ( this.isType(value) ) return value
 
@@ -703,7 +705,7 @@ yup.date().transform(function(formats = 'MMM dd, yyyy'){
 Define a string schema. Supports all the same methods as [`mixed`](#mixed).
 
 ```javascript
-var schema = yup.string();
+var schema = jupp.string();
 schema.isValid('hello') //=> true
 ```
 
@@ -778,7 +780,7 @@ will only validate that the value is uppercase.
 Define a number schema. Supports all the same methods as [`mixed`](#mixed).
 
 ```javascript
-var schema = yup.number();
+var schema = jupp.number();
 schema.isValid(10) //=> true
 ```
 
@@ -822,7 +824,7 @@ Adjusts the value via the specified method of `Math` (defaults to 'round').
 Define a boolean schema. Supports all the same methods as [`mixed`](#mixed).
 
 ```javascript
-var schema = yup.boolean();
+var schema = jupp.boolean();
 schema.isValid(true) //=> true
 ```
 
@@ -833,7 +835,7 @@ for more robust parsing options see the extending schema types at the end of the
 Supports all the same methods as [`mixed`](#mixed).
 
 ```javascript
-var schema = yup.date();
+var schema = jupp.date();
 schema.isValid(new Date) //=> true
 ```
 
@@ -860,7 +862,7 @@ will apply to the elements as well. Options passed into `isValid` are passed als
 Supports all the same methods as [`mixed`](#mixed).
 
 ```javascript
-var schema = yup.array().of(number().min(2));
+var schema = jupp.array().of(number().min(2));
 schema.isValid([2, 3])   //=> true
 schema.isValid([1, -24]) //=> false
 
@@ -930,7 +932,7 @@ Define an object schema. Options passed into `isValid` are also passed to child 
 Supports all the same methods as [`mixed`](#mixed).
 
 ```javascript
-yup.object().shape({
+jupp.object().shape({
   name:      string().required(),
   age:       number().required().positive().integer(),
   email:     string().email(),
@@ -994,11 +996,11 @@ Transforms all object keys to CONSTANT_CASE.
 The simplest way to extend an existing type is just to cache a configured schema and use that through your application.
 
 ```js
-  var yup = require('yup');
+  var jupp = require('jupp');
   var parseFormats = ['MMM dd, yyy']
   var invalidDate = new Date('');
 
-  module.exports = yup.date()
+  module.exports = jupp.date()
     .transform(function(value, originalValue){
         if ( this.isType(value) ) return value
         //the default coercion transform failed so lets try it with Moment instead
@@ -1037,18 +1039,18 @@ function parseDateFromFormats(formats, parseStrict) {
 }
 
 // `addMethod` doesn't do anything special it's
-// equivalent to: yup.date.protoype.format = parseDateFromFormats
-yup.addMethod(yup.date, 'format', parseDateFromFormats)
+// equivalent to: jupp.date.protoype.format = parseDateFromFormats
+jupp.addMethod(jupp.date, 'format', parseDateFromFormats)
 ```
 
 __Creating new Types__
 
-Yup schema use the common constructor pattern for modeling inheritance. You can use any
+Jupp schema use the common constructor pattern for modeling inheritance. You can use any
 utility or pattern that works with that pattern. The below demonstrates using the es6 class
 syntax since its less verbose, but you absolutely aren't required to use it.
 
 ```js
-var DateSchema = yup.date
+var DateSchema = jupp.date
 var invalidDate = new Date(''); // our failed to coerce value
 
 class MomentDateSchemaType extends DateSchema {

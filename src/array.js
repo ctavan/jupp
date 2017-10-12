@@ -107,7 +107,7 @@ inherits(ArraySchema, MixedSchema, {
 
     if (schema !== false && !isSchema(schema)) {
       throw new TypeError(
-        `${'`array.of()` sub-schema must be a valid yup schema, or `false` to negate a current sub-schema. ' +
+        `${'`array.of()` sub-schema must be a valid jupp schema, or `false` to negate a current sub-schema. ' +
         'not: '}${typeName(schema)}`,
       );
     }

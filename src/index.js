@@ -19,7 +19,7 @@ const lazy = fn => new Lazy(fn);
 
 function addMethod(schemaType, name, fn) {
   if (!schemaType || !isSchema(schemaType.prototype)) {
-    throw new TypeError('You must provide a yup schema constructor function');
+    throw new TypeError('You must provide a jupp schema constructor function');
   }
 
   if (typeof name !== 'string') {

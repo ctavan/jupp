@@ -1,7 +1,7 @@
-const yup = require('../src');
+const jupp = require('../src');
 const data = require('./data.json');
 
-const { object, array, string, bool, number, mixed, date } = yup;
+const { object, array, string, bool, number, mixed, date } = jupp;
 
 const AttributeDatatype = {
   Number: 1,
