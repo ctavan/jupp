@@ -11,8 +11,7 @@
     "lint": "eslint .",
     "clean": "rimaf ./lib/*",
     "toc": "doctoc README.md --github",
-    "build": "babel src --out-dir lib && yarn run toc",
-    "release": "release"
+    "build": "babel src --out-dir lib && yarn run toc"
   },
   "files": [
     "lib"
@@ -55,9 +54,7 @@
     "eslint-plugin-jsx-a11y": "^6.0.2",
     "eslint-plugin-react": "^7.4.0",
     "jest": "^21.2.1",
-    "mt-changelog": "^0.6.2",
     "promises-aplus-tests": "^2.1.2",
-    "release-script": "^1.0.2",
     "sinon": "^4.0.0",
     "sinon-chai": "^2.14.0"
   },
@@ -67,8 +64,5 @@
     "synchronous-promise": "^1.0.17",
     "toposort": "^1.0.4",
     "type-name": "^2.0.1"
-  },
-  "release-script": {
-    "defaultDryRun": "false"
   }
 }
