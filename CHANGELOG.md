@@ -1,3 +1,5 @@
+Changelog was moved to: https://github.com/ctavan/jupp/releases
+
 v0.22.0 - Sat, 26 Aug 2017 14:48:57 GMT
 ---------------------------------------
 
