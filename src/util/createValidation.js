@@ -5,13 +5,19 @@ import getPromise from './getPromise';
 import Ref from '../Reference';
 import ValidationError from '../ValidationError';
 
-const formatError = ValidationError.formatError;
+const { formatError } = ValidationError;
 
 function resolveParams(oldParams, newParams, resolve) {
   return mapValues({ ...oldParams, ...newParams }, resolve);
 }
 
-function createErrorFactory({ value, label, resolve, originalValue, ...opts }) {
+function createErrorFactory({
+  value,
+  label,
+  resolve,
+  originalValue,
+  ...opts
+}) {
   return function createError({
     path = opts.path,
     message = opts.message,
@@ -33,12 +39,18 @@ function createErrorFactory({ value, label, resolve, originalValue, ...opts }) {
         , path
         , type,
       )
-      , { params });
+      , { params },
+    );
   };
 }
 
 export default function createValidation(options) {
-  const { name, message, test, params } = options;
+  const {
+    name,
+    message,
+    test,
+    params,
+  } = options;
 
   function validate({
     value,
@@ -50,7 +62,7 @@ export default function createValidation(options) {
     ...rest
   }) {
     const sync = options.sync || validateSync;
-    const parent = validateOptions.parent;
+    const { parent } = validateOptions;
     const resolve = val => (Ref.isRef(val) ? val.getValue(parent, validateOptions.context) : val);
 
     const createError = createErrorFactory({

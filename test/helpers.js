@@ -11,9 +11,7 @@ export const castAndShouldFail = (schema, value) => {
 export const castAll = (inst, { invalid = [], valid = [] }) => {
   valid.forEach(([value, result, schema = inst]) => {
     it(`should cast ${JSON.stringify(value)} to ${JSON.stringify(result)}`, () => {
-      expect(
-        schema.cast(value),
-      )
+      expect(schema.cast(value))
         .to.equal(result);
     });
   });
@@ -35,7 +33,8 @@ export const validateAll = (inst, { valid = [], invalid = [] }) => {
         [value, schema] = config;
       }
 
-      it(`${JSON.stringify(value)} should be ${isValid ? 'valid' : 'invalid'}`,
+      it(
+        `${JSON.stringify(value)} should be ${isValid ? 'valid' : 'invalid'}`,
         () => schema.isValid(value).should.become(isValid),
       );
     });

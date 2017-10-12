@@ -21,10 +21,8 @@ export default function reach(obj, path, value, context) {
 
       if (value) {
         if (isArray && idx >= value.length) {
-          throw new Error(
-            `Yup.reach cannot resolve an array item at index: ${_part}, in the path: ${path}. ` +
-            'because there is no value at that index. ',
-          );
+          throw new Error(`Yup.reach cannot resolve an array item at index: ${_part}, in the path: ${path}. ` +
+            'because there is no value at that index. ');
         }
 
         value = value[idx];
@@ -35,10 +33,8 @@ export default function reach(obj, path, value, context) {
       obj = obj.resolve({ context, parent, value });
 
       if (!has(obj, 'fields') || !has(obj.fields, part)) {
-        throw new Error(
-          `The schema does not contain the path: ${path}. ` +
-          `(failed at: ${lastPart} which is a type: "${obj._type}") `,
-        );
+        throw new Error(`The schema does not contain the path: ${path}. ` +
+          `(failed at: ${lastPart} which is a type: "${obj._type}") `);
       }
 
       obj = obj.fields[part];

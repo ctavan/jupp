@@ -6,7 +6,12 @@ export const mixed = {
   required: '${path} is a required field',
   oneOf: '${path} must be one of the following values: ${values}',
   notOneOf: '${path} must not be one of the following values: ${values}',
-  notType: ({ path, type, value, originalValue }) => {
+  notType: ({
+    path,
+    type,
+    value,
+    originalValue,
+  }) => {
     const isCast = originalValue != null && originalValue !== value;
     let msg = `${`${path} must be a \`${type}\` type, ` +
       `but the final value was: \`${printValue(value, true)}\``}${isCast ?

@@ -32,7 +32,8 @@ export function propagateErrors(abortEarly, errors) {
 export function settled(promises, sync) {
   const settle = promise => promise.then(
     value => ({ fulfilled: true, value }),
-    value => ({ fulfilled: false, value }));
+    value => ({ fulfilled: false, value }),
+  );
 
   return getPromise(sync).all(promises.map(settle));
 }

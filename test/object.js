@@ -15,8 +15,7 @@ describe('Object types', () => {
     });
 
     it('should return null for failed casts', () => {
-      expect(
-        object().cast('dfhdfh', { assert: false })).to.equal(null);
+      expect(object().cast('dfhdfh', { assert: false })).to.equal(null);
     });
 
     it('should recursively cast fields', () => {
@@ -35,9 +34,7 @@ describe('Object types', () => {
         arr: array().of(number()),
         dte: date(),
         nested: object().shape({ str: string() }),
-        arrNested: array().of(
-          object().shape({ num: number() }),
-        ),
+        arrNested: array().of(object().shape({ num: number() })),
       })
         .cast(obj).should.eql({
           num: 5,
@@ -182,8 +179,7 @@ describe('Object types', () => {
       .cast({
         extra: true,
         names: { first: 'john', extra: true },
-      }, { stripUnknown: true },
-      )
+      }, { stripUnknown: true })
       .should.eql({
         names: {
           first: 'john',
@@ -427,9 +423,7 @@ describe('Object types', () => {
     it('should resolve array sub types', async () => {
       const inst = object({
         str: string().required().nullable(),
-        nested: array().of(
-          lazy(() => inst.default(undefined)),
-        ),
+        nested: array().of(lazy(() => inst.default(undefined))),
       });
 
       const value = {
@@ -595,7 +589,9 @@ describe('Object types', () => {
     });
 
     return Promise.all([
-      inst.isValid({ stats: { isBig: true }, rand: 5, noteDate: 7, other: 4 })
+      inst.isValid({
+        stats: { isBig: true }, rand: 5, noteDate: 7, other: 4,
+      })
         .should.eventually().equal(false),
       inst.isValid({ stats: { isBig: true }, noteDate: 1, other: 4 })
         .should.eventually().equal(false),

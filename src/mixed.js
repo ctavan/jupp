@@ -26,7 +26,14 @@ function extractTestParams(name, message, test) {
     test = name; message = locale.default; name = null;
   }
 
-  if (typeof name === 'string' || name === null) { opts = { name, test, message, exclusive: false }; }
+  if (typeof name === 'string' || name === null) {
+    opts = {
+      name,
+      test,
+      message,
+      exclusive: false,
+    };
+  }
 
   if (typeof opts.test !== 'function') { throw new TypeError('`test` is a required parameters'); }
 
@@ -143,13 +150,11 @@ SchemaType.prototype = {
     ) {
       const formattedValue = printValue(value);
       const formattedResult = printValue(result);
-      throw new TypeError(
-        `${`The value of ${options.path || 'field'} could not be cast to a value ` +
+      throw new TypeError(`${`The value of ${options.path || 'field'} could not be cast to a value ` +
         `that satisfies the schema type: "${resolvedSchema._type}". \n\n` +
         `attempted value: ${formattedValue} \n`}${
-          (formattedResult !== formattedValue)
-            ? `result of cast: ${formattedResult}` : ''}`,
-      );
+        (formattedResult !== formattedValue)
+          ? `result of cast: ${formattedResult}` : ''}`);
     }
 
     return result;
@@ -157,8 +162,7 @@ SchemaType.prototype = {
 
   _cast(rawValue) {
     let value = rawValue === undefined ? rawValue
-      : this.transforms.reduce(
-        (val, fn) => fn.call(this, val, rawValue), rawValue);
+      : this.transforms.reduce((val, fn) => fn.call(this, val, rawValue), rawValue);
 
     if (value === undefined && has(this, '_default')) {
       value = this.default();
@@ -194,14 +198,22 @@ SchemaType.prototype = {
     const abortEarly = this._option('abortEarly', options);
     const sync = this._option('sync', options);
 
-    const path = options.path;
+    const { path } = options;
     const label = this._label;
 
     if (!isStrict) {
       value = this._cast(value, { assert: false, ...options });
     }
     // value is cast, we can check if it meets type requirements
-    const validationParams = { value, path, schema: this, options, sync, label, originalValue };
+    const validationParams = {
+      value,
+      path,
+      schema: this,
+      options,
+      sync,
+      label,
+      originalValue,
+    };
     const initialTests = [];
 
     if (this._typeError) { initialTests.push(this._typeError(validationParams)); }

@@ -1,7 +1,7 @@
 import { ref, date } from '../src';
 
 function isValidDate(value) {
-  return value instanceof Date && !isNaN(value.getTime());
+  return value instanceof Date && !Number.isNaN(Number(value.getTime()));
 }
 
 describe('Date types', () => {

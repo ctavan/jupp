@@ -1,7 +1,15 @@
-const yup = require('../src');
+const jupp = require('../src');
 const data = require('./data.json');
 
-const { object, array, string, bool, number, mixed, date } = yup;
+const {
+  object,
+  array,
+  string,
+  bool,
+  number,
+  mixed,
+  date,
+} = jupp;
 
 const AttributeDatatype = {
   Number: 1,
@@ -83,13 +91,11 @@ const schema = object({
   text: string(),
 
   dataType: number().oneOf(values),
-  customValues: array().of(
-    object({
-      valueID: number(),
-      text: string(),
-    })
-      .camelCase(),
-  ),
+  customValues: array().of(object({
+    valueID: number(),
+    text: string(),
+  })
+    .camelCase()),
 
   children: array().of(ChildAttribute),
 }).camelCase();

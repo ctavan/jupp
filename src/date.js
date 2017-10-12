@@ -28,7 +28,7 @@ export default function DateSchema() {
 inherits(DateSchema, MixedSchema, {
 
   _typeCheck(v) {
-    return isDate(v) && !isNaN(v.getTime());
+    return isDate(v) && !Number.isNaN(Number(v.getTime()));
   },
 
   min(min, msg) {
