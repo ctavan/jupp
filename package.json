@@ -5,6 +5,7 @@
   "main": "lib/index.js",
   "scripts": {
     "benchmark": "babel-node benchmark/index.js",
+    "commit": "git-cz",
     "jest": "jest",
     "test": "yarn run lint && yarn run jest",
     "tdd": "jest --watchAll",
@@ -46,6 +47,8 @@
     "benchmark": "^2.0.0",
     "chai": "^4.1.2",
     "chai-as-promised": "^7.1.1",
+    "commitizen": "^2.9.6",
+    "cz-conventional-changelog": "^2.0.0",
     "dirty-chai": "^2.0.1",
     "doctoc": "^1.0.0",
     "eslint": "^4.8.0",
@@ -64,5 +67,10 @@
     "synchronous-promise": "^1.0.17",
     "toposort": "^1.0.4",
     "type-name": "^2.0.1"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
   }
 }
