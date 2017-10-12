@@ -6,12 +6,12 @@
   "scripts": {
     "benchmark": "babel-node benchmark/index.js",
     "jest": "jest",
-    "test": "npm run lint && npm run jest",
+    "test": "yarn run lint && yarn run jest",
     "tdd": "jest --watchAll",
     "lint": "eslint .",
     "clean": "rimaf ./lib/*",
     "toc": "doctoc README.md --github",
-    "build": "babel src --out-dir lib && npm run toc",
+    "build": "babel src --out-dir lib && yarn run toc",
     "release": "release"
   },
   "files": [
