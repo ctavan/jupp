@@ -5,14 +5,14 @@
   "main": "lib/index.js",
   "scripts": {
     "benchmark": "babel-node benchmark/index.js",
+    "build": "babel src --out-dir lib && yarn run toc",
+    "clean": "rimaf ./lib/*",
     "commit": "git-cz",
     "jest": "jest",
-    "test": "yarn run lint && yarn run jest",
-    "tdd": "jest --watchAll",
     "lint": "eslint .",
-    "clean": "rimaf ./lib/*",
-    "toc": "doctoc README.md --github",
-    "build": "babel src --out-dir lib && yarn run toc"
+    "tdd": "jest --watchAll",
+    "test": "yarn run lint && yarn run jest",
+    "toc": "doctoc README.md --github"
   },
   "files": [
     "lib"
