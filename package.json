@@ -11,7 +11,7 @@
     "commit": "git-cz",
     "jest": "jest",
     "lint": "eslint .",
-    "prepublish": "yarn run build",
+    "prepublishOnly": "yarn run build",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post",
     "tdd": "jest --watchAll",
     "test": "yarn run lint && yarn run jest",
