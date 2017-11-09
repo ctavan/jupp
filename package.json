@@ -76,7 +76,7 @@
   "dependencies": {
     "lodash": "^4.17.0",
     "property-expr": "^1.2.0",
-    "synchronous-promise": "^1.0.17",
+    "synchronous-promise": "^2.0.1",
     "toposort": "^1.0.4",
     "type-name": "^2.0.1"
   },
