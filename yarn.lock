@@ -5048,9 +5048,9 @@ symbol-tree@^3.2.1:
   version "3.2.2"
   resolved "https://registry.npmjs.org/symbol-tree/-/symbol-tree-3.2.2.tgz#ae27db38f660a7ae2e1c3b7d1bc290819b8519e6"
 
-synchronous-promise@^1.0.17:
-  version "1.0.17"
-  resolved "https://registry.npmjs.org/synchronous-promise/-/synchronous-promise-1.0.17.tgz#bc21e095fb76ddf6c7c6e014ded28d24985dadc4"
+synchronous-promise@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.npmjs.org/synchronous-promise/-/synchronous-promise-2.0.1.tgz#b97133837a5674002e45b87870703634c3c56bb2"
 
 table@^4.0.1:
   version "4.0.2"
