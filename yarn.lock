@@ -511,6 +511,13 @@ babel-helpers@^6.24.1:
     babel-runtime "^6.22.0"
     babel-template "^6.24.1"
 
+babel-jest@22.0.2:
+  version "22.0.2"
+  resolved "https://registry.npmjs.org/babel-jest/-/babel-jest-22.0.2.tgz#7d9fbc60fb4ff4415df4a16c884683904daf30a8"
+  dependencies:
+    babel-plugin-istanbul "^4.1.5"
+    babel-preset-jest "^22.0.2"
+
 babel-jest@^21.2.0:
   version "21.2.0"
   resolved "https://registry.npmjs.org/babel-jest/-/babel-jest-21.2.0.tgz#2ce059519a9374a2c46f2455b6fbef5ad75d863e"
@@ -534,7 +541,7 @@ babel-plugin-check-es2015-constants@^6.22.0:
   dependencies:
     babel-runtime "^6.22.0"
 
-babel-plugin-istanbul@^4.0.0:
+babel-plugin-istanbul@^4.0.0, babel-plugin-istanbul@^4.1.5:
   version "4.1.5"
   resolved "https://registry.npmjs.org/babel-plugin-istanbul/-/babel-plugin-istanbul-4.1.5.tgz#6760cdd977f411d3e175bb064f2bc327d99b2b6e"
   dependencies:
@@ -545,6 +552,10 @@ babel-plugin-istanbul@^4.0.0:
 babel-plugin-jest-hoist@^21.2.0:
   version "21.2.0"
   resolved "https://registry.npmjs.org/babel-plugin-jest-hoist/-/babel-plugin-jest-hoist-21.2.0.tgz#2cef637259bd4b628a6cace039de5fcd14dbb006"
+
+babel-plugin-jest-hoist@^22.0.2:
+  version "22.0.2"
+  resolved "https://registry.npmjs.org/babel-plugin-jest-hoist/-/babel-plugin-jest-hoist-22.0.2.tgz#1067ad72a359e0ba1f752cf8b347a8f8560b5243"
 
 babel-plugin-syntax-async-functions@^6.8.0:
   version "6.13.0"
@@ -814,6 +825,13 @@ babel-preset-jest@^21.2.0:
   resolved "https://registry.npmjs.org/babel-preset-jest/-/babel-preset-jest-21.2.0.tgz#ff9d2bce08abd98e8a36d9a8a5189b9173b85638"
   dependencies:
     babel-plugin-jest-hoist "^21.2.0"
+    babel-plugin-syntax-object-rest-spread "^6.13.0"
+
+babel-preset-jest@^22.0.2:
+  version "22.0.2"
+  resolved "https://registry.npmjs.org/babel-preset-jest/-/babel-preset-jest-22.0.2.tgz#d4a80171d0ea4b4ac39ac7272a033d59ffa9a6f1"
+  dependencies:
+    babel-plugin-jest-hoist "^22.0.2"
     babel-plugin-syntax-object-rest-spread "^6.13.0"
 
 babel-register@^6.26.0:
