@@ -11,7 +11,7 @@ import Lazy from './Lazy';
 import ValidationError from './ValidationError';
 import reach from './util/reach';
 import isSchema from './util/isSchema';
-import setLocale from './setLocale'
+import setLocale from './setLocale';
 
 const boolean = bool;
 const ref = (key, options) => new Ref(key, options);
