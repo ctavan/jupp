@@ -11,6 +11,7 @@ import Lazy from './Lazy';
 import ValidationError from './ValidationError';
 import reach from './util/reach';
 import isSchema from './util/isSchema';
+import setLocale from './setLocale'
 
 const boolean = bool;
 const ref = (key, options) => new Ref(key, options);
@@ -48,6 +49,7 @@ export {
   isSchema,
   addMethod,
   ValidationError,
+  setLocale,
 };
 
 export default {
@@ -65,4 +67,5 @@ export default {
   isSchema,
   addMethod,
   ValidationError,
+  setLocale,
 };
