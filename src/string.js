@@ -15,16 +15,16 @@ const hasLength = value => isAbsent(value) || value.length > 0;
 const isTrimmed = value => isAbsent(value) || value === value.trim();
 
 export default function StringSchema() {
-  if (!(this instanceof StringSchema)) { return new StringSchema(); }
+  if (!(this instanceof StringSchema)) {
+    return new StringSchema();
+  }
 
   MixedSchema.call(this, { type: 'string' });
 
   this.withMutation(() => {
     this.transform(function transform(value) {
       if (this.isType(value)) return value;
-      return value != null && value.toString
-        ? value.toString()
-        : value;
+      return value != null && value.toString ? value.toString() : value;
     });
   });
 }
@@ -39,14 +39,12 @@ inherits(StringSchema, MixedSchema, {
   },
 
   required(msg) {
-    const next = MixedSchema.prototype
-      .required.call(this, msg || mixed.required);
-
-    return next.test(
-      'required'
-      , msg || mixed.required
-      , hasLength,
+    const next = MixedSchema.prototype.required.call(
+      this,
+      msg || mixed.required,
     );
+
+    return next.test('required', msg || mixed.required, hasLength);
   },
 
   length(length, msg) {
@@ -93,16 +91,18 @@ inherits(StringSchema, MixedSchema, {
       message: defaultMessage,
     };
 
-    const { excludeEmptyString, message } = { ...defaultOptions, ...optionsObject };
+    const { excludeEmptyString, message } = {
+      ...defaultOptions,
+      ...optionsObject,
+    };
 
     return this.test({
       message: message || locale.matches,
       params: { regex },
-      test: value => (
+      test: value =>
         isAbsent(value) ||
         (value === '' && !excludeEmptyString) ||
-        regex.test(value)
-      ),
+        regex.test(value),
     });
   },
 
@@ -122,38 +122,38 @@ inherits(StringSchema, MixedSchema, {
 
   // -- transforms --
   ensure() {
-    return this
-      .default('')
-      .transform(val => (val === null ? '' : val));
+    return this.default('').transform(val => (val === null ? '' : val));
   },
 
   trim(msg) {
     msg = msg || locale.trim;
 
-    return this
-      .transform(val => (val != null ? val.trim() : val))
-      .test('trim', msg, isTrimmed);
+    return this.transform(val => (val != null ? val.trim() : val)).test(
+      'trim',
+      msg,
+      isTrimmed,
+    );
   },
 
   lowercase(msg) {
-    return this
-      .transform(value => (!isAbsent(value) ? value.toLowerCase() : value))
-      .test({
-        name: 'string_case',
-        exclusive: true,
-        message: msg || locale.lowercase,
-        test: value => isAbsent(value) || value === value.toLowerCase(),
-      });
+    return this.transform(
+      value => (!isAbsent(value) ? value.toLowerCase() : value),
+    ).test({
+      name: 'string_case',
+      exclusive: true,
+      message: msg || locale.lowercase,
+      test: value => isAbsent(value) || value === value.toLowerCase(),
+    });
   },
 
   uppercase(msg) {
-    return this
-      .transform(value => (!isAbsent(value) ? value.toUpperCase() : value))
-      .test({
-        name: 'string_case',
-        exclusive: true,
-        message: msg || locale.uppercase,
-        test: value => isAbsent(value) || value === value.toUpperCase(),
-      });
+    return this.transform(
+      value => (!isAbsent(value) ? value.toUpperCase() : value),
+    ).test({
+      name: 'string_case',
+      exclusive: true,
+      message: msg || locale.uppercase,
+      test: value => isAbsent(value) || value === value.toUpperCase(),
+    });
   },
 });

@@ -8,7 +8,9 @@ const isNaN = value => value !== +value;
 const isInteger = val => isAbsent(val) || val === (val | 0); // eslint-disable-line no-bitwise
 
 export default function NumberSchema() {
-  if (!(this instanceof NumberSchema)) { return new NumberSchema(); }
+  if (!(this instanceof NumberSchema)) {
+    return new NumberSchema();
+  }
 
   MixedSchema.call(this, { type: 'number' });
 
@@ -25,7 +27,6 @@ export default function NumberSchema() {
 }
 
 inherits(NumberSchema, MixedSchema, {
-
   _typeCheck(value) {
     if (value instanceof Number) {
       value = value.valueOf();
@@ -73,8 +74,8 @@ inherits(NumberSchema, MixedSchema, {
   },
 
   truncate() {
-    return this.transform(value =>
-      (!isAbsent(value) ? (value | 0) : value)); // eslint-disable-line no-bitwise
+    // eslint-disable-next-line no-bitwise
+    return this.transform(value => (!isAbsent(value) ? value | 0 : value));
   },
 
   round(method) {
@@ -82,12 +83,18 @@ inherits(NumberSchema, MixedSchema, {
     method = (method && method.toLowerCase()) || 'round';
 
     // this exists for symemtry with the new Math.trunc
-    if (method === 'trunc') { return this.truncate(); }
-
-    if (avail.indexOf(method.toLowerCase()) === -1) {
-      throw new TypeError(`Only valid options for round() are: ${avail.join(', ')}`);
+    if (method === 'trunc') {
+      return this.truncate();
     }
 
-    return this.transform(value => (!isAbsent(value) ? Math[method](value) : value));
+    if (avail.indexOf(method.toLowerCase()) === -1) {
+      throw new TypeError(
+        `Only valid options for round() are: ${avail.join(', ')}`,
+      );
+    }
+
+    return this.transform(
+      value => (!isAbsent(value) ? Math[method](value) : value),
+    );
   },
 });

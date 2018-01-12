@@ -19,22 +19,26 @@ import runValidations, { propagateErrors } from './util/runValidations';
 
 function unknown(ctx, value) {
   const known = Object.keys(ctx.fields);
-  return Object.keys(value)
-    .filter(key => known.indexOf(key) === -1);
+  return Object.keys(value).filter(key => known.indexOf(key) === -1);
 }
 
-
 export default function ObjectSchema(spec) {
-  if (!(this instanceof ObjectSchema)) { return new ObjectSchema(spec); }
+  if (!(this instanceof ObjectSchema)) {
+    return new ObjectSchema(spec);
+  }
 
   MixedSchema.call(this, {
     type: 'object',
     default() {
-      const dft = transform(this._nodes, (obj, key) => {
-        obj[key] = this.fields[key].default
-          ? this.fields[key].default()
-          : undefined;
-      }, {});
+      const dft = transform(
+        this._nodes,
+        (obj, key) => {
+          obj[key] = this.fields[key].default
+            ? this.fields[key].default()
+            : undefined;
+        },
+        {},
+      );
 
       return Object.keys(dft).length === 0 ? undefined : dft;
     },
@@ -49,9 +53,13 @@ export default function ObjectSchema(spec) {
       if (typeof value === 'string') {
         try {
           value = JSON.parse(value);
-        } catch (err) { value = null; }
+        } catch (err) {
+          value = null;
+        }
       }
-      if (this.isType(value)) { return value; }
+      if (this.isType(value)) {
+        return value;
+      }
       return null;
     });
 
@@ -62,7 +70,6 @@ export default function ObjectSchema(spec) {
 }
 
 inherits(ObjectSchema, MixedSchema, {
-
   _typeCheck(value) {
     return isPlainObject(value) || typeof value === 'function';
   },
@@ -71,9 +78,13 @@ inherits(ObjectSchema, MixedSchema, {
     let value = MixedSchema.prototype._cast.call(this, _value, options);
 
     // should ignore nulls here
-    if (value === undefined) { return this.default(); }
+    if (value === undefined) {
+      return this.default();
+    }
 
-    if (!this._typeCheck(value)) { return value; }
+    if (!this._typeCheck(value)) {
+      return value;
+    }
 
     const { fields } = this;
     const strip = this._option('stripUnknown', options) === true;
@@ -86,39 +97,47 @@ inherits(ObjectSchema, MixedSchema, {
       __validating: false,
     };
 
-    value = transform(props, (obj, prop) => {
-      let field = fields[prop];
-      const exists = has(value, prop);
+    value = transform(
+      props,
+      (obj, prop) => {
+        let field = fields[prop];
+        const exists = has(value, prop);
 
-      if (field) {
-        const strict = field._options && field._options.strict;
+        if (field) {
+          const strict = field._options && field._options.strict;
 
-        // safe to mutate since this is fired in sequence
-        innerOptions.path = makePath`${options.path}.${prop}`;
-        innerOptions.value = value[prop];
+          // safe to mutate since this is fired in sequence
+          innerOptions.path = makePath`${options.path}.${prop}`;
+          innerOptions.value = value[prop];
 
-        field = field.resolve(innerOptions);
+          field = field.resolve(innerOptions);
 
-        if (field._strip === true) { return; }
+          if (field._strip === true) {
+            return;
+          }
 
-        const fieldValue = !options.__validating || !strict
-          ? field.cast(value[prop], innerOptions)
-          : value[prop];
+          const fieldValue =
+            !options.__validating || !strict
+              ? field.cast(value[prop], innerOptions)
+              : value[prop];
 
-        if (fieldValue !== undefined) {
-          obj[prop] = fieldValue;
+          if (fieldValue !== undefined) {
+            obj[prop] = fieldValue;
+          }
+        } else if (exists && !strip) {
+          obj[prop] = value[prop];
         }
-      } else if (exists && !strip) {
-        obj[prop] = value[prop];
-      }
-    }, innerOptions.parent);
+      },
+      innerOptions.parent,
+    );
 
     return value;
   },
 
   _validate(_value, opts = {}) {
     const errors = [];
-    let originalValue = opts.originalValue != null ? opts.originalValue : _value;
+    let originalValue =
+      opts.originalValue != null ? opts.originalValue : _value;
 
     const abortEarly = this._option('abortEarly', opts);
     const recursive = this._option('recursive', opts);
@@ -129,15 +148,16 @@ inherits(ObjectSchema, MixedSchema, {
     return MixedSchema.prototype._validate
       .call(this, _value, opts)
       .catch(propagateErrors(abortEarly, errors))
-      .then((value) => {
-        if (!recursive || !isPlainObject(value)) { // only iterate though actual objects
+      .then(value => {
+        if (!recursive || !isPlainObject(value)) {
+          // only iterate though actual objects
           if (errors.length) throw errors[0];
           return value;
         }
 
         originalValue = originalValue || value;
 
-        const validations = this._nodes.map((key) => {
+        const validations = this._nodes.map(key => {
           const path = makePath`${opts.path}.${key}`;
           const field = this.fields[key];
 
@@ -154,7 +174,9 @@ inherits(ObjectSchema, MixedSchema, {
             // 2. this is strict in which case the nested values weren't cast either
             innerOptions.strict = true;
 
-            if (field.validate) { return field.validate(value[key], innerOptions); }
+            if (field.validate) {
+              return field.validate(value[key], innerOptions);
+            }
           }
 
           return true;
@@ -184,7 +206,9 @@ inherits(ObjectSchema, MixedSchema, {
     const next = this.clone();
     const fields = Object.assign(next.fields, schema);
 
-    if (!isArray(excludes[0])) { excludes = [excludes]; }
+    if (!isArray(excludes[0])) {
+      excludes = [excludes];
+    }
 
     next.fields = fields;
 
@@ -202,10 +226,12 @@ inherits(ObjectSchema, MixedSchema, {
   from(from, to, alias) {
     const fromGetter = getter(from, true);
 
-    return this.transform((obj) => {
+    return this.transform(obj => {
       let newObj = obj;
 
-      if (obj == null) { return obj; }
+      if (obj == null) {
+        return obj;
+      }
 
       if (has(obj, from)) {
         newObj = alias ? { ...obj } : omit(obj, from);
@@ -228,21 +254,20 @@ inherits(ObjectSchema, MixedSchema, {
       message,
       test(value) {
         return (
-          value == null ||
-          !noAllow ||
-          unknown(this.schema, value).length === 0
+          value == null || !noAllow || unknown(this.schema, value).length === 0
         );
       },
     });
 
-    if (noAllow) { next._options.stripUnknown = true; }
+    if (noAllow) {
+      next._options.stripUnknown = true;
+    }
 
     return next;
   },
 
   transformKeys(fn) {
-    return this.transform(obj => obj &&
-      mapKeys(obj, (_, key) => fn(key)));
+    return this.transform(obj => obj && mapKeys(obj, (_, key) => fn(key)));
   },
 
   camelCase() {

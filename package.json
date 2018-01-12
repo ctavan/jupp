@@ -12,6 +12,7 @@
     "jest": "jest",
     "lint": "eslint .",
     "prepublishOnly": "yarn run build",
+    "prettier": "prettier --config .prettierrc --write \"{src,test}/**/*.js\"",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post",
     "tdd": "jest --watchAll",
     "test": "yarn run lint && yarn run jest",
@@ -43,6 +44,7 @@
   "lint-staged": {
     "*.js": [
       "yarn run toc",
+      "yarn prettier",
       "git add"
     ]
   },
@@ -68,6 +70,7 @@
     "husky": "^0.14.3",
     "jest": "^21.2.1",
     "lint-staged": "^4.2.3",
+    "prettier": "^1.10.2",
     "promises-aplus-tests": "^2.1.2",
     "semantic-release": "^8.0.3",
     "sinon": "^4.0.0",

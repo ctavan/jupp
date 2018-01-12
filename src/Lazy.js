@@ -4,7 +4,9 @@ class Lazy {
   constructor(mapFn) {
     this._resolve = (...args) => {
       const schema = mapFn(...args);
-      if (!isSchema(schema)) { throw new TypeError('lazy() functions must return a valid schema'); }
+      if (!isSchema(schema)) {
+        throw new TypeError('lazy() functions must return a valid schema');
+      }
 
       return schema;
     };
@@ -15,13 +17,11 @@ class Lazy {
   }
 
   cast(value, options) {
-    return this._resolve(value, options)
-      .cast(value, options);
+    return this._resolve(value, options).cast(value, options);
   }
 
   validate(value, options) {
-    return this._resolve(value, options)
-      .validate(value, options);
+    return this._resolve(value, options).validate(value, options);
   }
 }
 

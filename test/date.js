@@ -31,24 +31,48 @@ describe('Date types', () => {
     inst.isType(false).should.equal(false);
     inst.isType(null).should.equal(false);
     inst.isType(NaN).should.equal(false);
-    inst.nullable().isType(new Date()).should.equal(true);
+    inst
+      .nullable()
+      .isType(new Date())
+      .should.equal(true);
   });
 
   it('should VALIDATE correctly', () => {
-    const inst = date().required().max(new Date(2014, 5, 15));
+    const inst = date()
+      .required()
+      .max(new Date(2014, 5, 15));
 
     return Promise.all([
-      date().isValid(null).should.eventually().equal(false),
-      date().nullable().isValid(null).should.eventually().equal(true),
+      date()
+        .isValid(null)
+        .should.eventually()
+        .equal(false),
+      date()
+        .nullable()
+        .isValid(null)
+        .should.eventually()
+        .equal(true),
 
-      inst.isValid(new Date(2014, 0, 15)).should.eventually().equal(true),
-      inst.isValid(new Date(2014, 7, 15)).should.eventually().equal(false),
-      inst.isValid('5').should.eventually().equal(true),
+      inst
+        .isValid(new Date(2014, 0, 15))
+        .should.eventually()
+        .equal(true),
+      inst
+        .isValid(new Date(2014, 7, 15))
+        .should.eventually()
+        .equal(false),
+      inst
+        .isValid('5')
+        .should.eventually()
+        .equal(true),
 
-      inst.validate().should.be.rejected().then((err) => {
-        err.errors.length.should.equal(1);
-        err.errors[0].should.contain('required');
-      }),
+      inst
+        .validate()
+        .should.be.rejected()
+        .then(err => {
+          err.errors.length.should.equal(1);
+          err.errors[0].should.contain('required');
+        }),
     ]);
   });
 
@@ -57,20 +81,40 @@ describe('Date types', () => {
     const invalid = new Date(2014, 1, 15);
     const valid = new Date(2014, 5, 15);
 
-    (function test() { date().max('hello'); }).should.throw(TypeError);
-    (function test() { date().max(ref('$foo')); }).should.not.throw();
+    (function test() {
+      date().max('hello');
+    }.should.throw(TypeError));
+    (function test() {
+      date().max(ref('$foo'));
+    }.should.not.throw());
 
     return Promise.all([
-      date().min(min).isValid(valid).should.eventually().equal(true),
-      date().min(min).isValid(invalid).should.eventually().equal(false),
-      date().min(min).isValid(null).should.eventually().equal(false),
+      date()
+        .min(min)
+        .isValid(valid)
+        .should.eventually()
+        .equal(true),
+      date()
+        .min(min)
+        .isValid(invalid)
+        .should.eventually()
+        .equal(false),
+      date()
+        .min(min)
+        .isValid(null)
+        .should.eventually()
+        .equal(false),
 
-      date().min(ref('$foo'))
+      date()
+        .min(ref('$foo'))
         .isValid(valid, { context: { foo: min } })
-        .should.eventually().equal(true),
-      date().min(ref('$foo'))
+        .should.eventually()
+        .equal(true),
+      date()
+        .min(ref('$foo'))
         .isValid(invalid, { context: { foo: min } })
-        .should.eventually().equal(false),
+        .should.eventually()
+        .equal(false),
     ]);
   });
 
@@ -79,22 +123,41 @@ describe('Date types', () => {
     const invalid = new Date(2014, 9, 15);
     const valid = new Date(2014, 5, 15);
 
-    (function test() { date().max('hello'); }).should.throw(TypeError);
-    (function test() { date().max(ref('$foo')); }).should.not.throw();
+    (function test() {
+      date().max('hello');
+    }.should.throw(TypeError));
+    (function test() {
+      date().max(ref('$foo'));
+    }.should.not.throw());
 
     return Promise.all([
-      date().max(max).isValid(valid).should.eventually().equal(true),
-      date().max(max).isValid(invalid).should.eventually().equal(false),
-      date().max(max)
+      date()
+        .max(max)
+        .isValid(valid)
+        .should.eventually()
+        .equal(true),
+      date()
+        .max(max)
+        .isValid(invalid)
+        .should.eventually()
+        .equal(false),
+      date()
+        .max(max)
         .nullable(true)
-        .isValid(null).should.eventually().equal(true),
+        .isValid(null)
+        .should.eventually()
+        .equal(true),
 
-      date().max(ref('$foo'))
+      date()
+        .max(ref('$foo'))
         .isValid(valid, { context: { foo: max } })
-        .should.eventually().equal(true),
-      date().max(ref('$foo'))
+        .should.eventually()
+        .equal(true),
+      date()
+        .max(ref('$foo'))
         .isValid(invalid, { context: { foo: max } })
-        .should.eventually().equal(false),
+        .should.eventually()
+        .equal(false),
     ]);
   });
 });

@@ -10,14 +10,14 @@ describe('ValidationError', () => {
       str.should.contain('here');
     });
 
-    it('should auto include any param named \'label\' or \'path\' as the \'path\' param', () => {
+    it("should auto include any param named 'label' or 'path' as the 'path' param", () => {
       const str = ValidationError.formatError('${path} goes here', {
         label: 'label',
       });
       str.should.contain('label');
     });
 
-    it('should use \'this\' if a \'label\' or \'path\' param is not provided', () => {
+    it("should use 'this' if a 'label' or 'path' param is not provided", () => {
       const str = ValidationError.formatError('${path} goes here', {});
       str.should.contain('this');
     });
