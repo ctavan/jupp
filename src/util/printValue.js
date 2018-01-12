@@ -1,9 +1,8 @@
 import isFunction from 'lodash/isFunction';
 import isSymbol from 'lodash/isSymbol';
 
-const symbolToString = typeof Symbol !== 'undefined' ?
-  Symbol.prototype.toString :
-  () => '';
+const symbolToString =
+  typeof Symbol !== 'undefined' ? Symbol.prototype.toString : () => '';
 
 const SYMBOL_REGEXP = /^Symbol\((.*)\)(.*)$/;
 
@@ -41,9 +40,9 @@ function printSimpleValue(val, quoteStrings = false) {
 
   const tag = Object.prototype.toString.call(val);
   if (tag === '[object Date]') {
-    return Number.isNaN(Number(val.getTime())) ?
-      String(val) :
-      Date.prototype.toISOString.call(val);
+    return Number.isNaN(Number(val.getTime()))
+      ? String(val)
+      : Date.prototype.toISOString.call(val);
   }
   if (tag === '[object Error]' || val instanceof Error) {
     return printError(val);
@@ -61,11 +60,15 @@ export default function printValue(value, quoteStrings) {
     return result;
   }
 
-  return JSON.stringify(value, function format(key, val) {
-    const formatted = printSimpleValue(this[key], quoteStrings);
-    if (formatted !== null) {
-      return formatted;
-    }
-    return val;
-  }, 2);
+  return JSON.stringify(
+    value,
+    function format(key, val) {
+      const formatted = printSimpleValue(this[key], quoteStrings);
+      if (formatted !== null) {
+        return formatted;
+      }
+      return val;
+    },
+    2,
+  );
 }

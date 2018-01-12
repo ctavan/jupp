@@ -1,4 +1,3 @@
-
 export default function makePath(strings, ...values) {
   const path = strings.reduce((str, next) => {
     const value = values.shift();

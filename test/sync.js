@@ -13,13 +13,16 @@ describe('Sync', () => {
 
     let result;
     let error;
-    schema.validate(data, {
-      sync: true,
-    }).then((res) => {
-      result = res;
-    }).catch((err) => {
-      error = err;
-    });
+    schema
+      .validate(data, {
+        sync: true,
+      })
+      .then(res => {
+        result = res;
+      })
+      .catch(err => {
+        error = err;
+      });
 
     expect(result).to.deep.equal(data);
     expect(error).to.be.undefined; // eslint-disable-line no-unused-expressions
@@ -35,13 +38,16 @@ describe('Sync', () => {
 
     let result;
     let error;
-    schema.validate(data, {
-      sync: true,
-    }).then((res) => {
-      result = res;
-    }).catch((err) => {
-      error = err;
-    });
+    schema
+      .validate(data, {
+        sync: true,
+      })
+      .then(res => {
+        result = res;
+      })
+      .catch(err => {
+        error = err;
+      });
 
     expect(result).to.be.undefined; // eslint-disable-line no-unused-expressions
     expect(error.name).to.equal('ValidationError');

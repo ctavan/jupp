@@ -19,11 +19,15 @@ function extractTestParams(name, message, test) {
   let opts = name;
 
   if (typeof message === 'function') {
-    test = message; message = locale.default; name = null;
+    test = message;
+    message = locale.default;
+    name = null;
   }
 
   if (typeof name === 'function') {
-    test = name; message = locale.default; name = null;
+    test = name;
+    message = locale.default;
+    name = null;
   }
 
   if (typeof name === 'string' || name === null) {
@@ -35,13 +39,17 @@ function extractTestParams(name, message, test) {
     };
   }
 
-  if (typeof opts.test !== 'function') { throw new TypeError('`test` is a required parameters'); }
+  if (typeof opts.test !== 'function') {
+    throw new TypeError('`test` is a required parameters');
+  }
 
   return opts;
 }
 
 export default function SchemaType(options = {}) {
-  if (!(this instanceof SchemaType)) { return new SchemaType(); }
+  if (!(this instanceof SchemaType)) {
+    return new SchemaType();
+  }
 
   this._deps = [];
   this._conditions = [];
@@ -56,23 +64,26 @@ export default function SchemaType(options = {}) {
     this.typeError(locale.notType);
   });
 
-  if (has(options, 'default')) { this._defaultDefault = options.default; }
+  if (has(options, 'default')) {
+    this._defaultDefault = options.default;
+  }
 
   this._type = options.type || 'mixed';
 }
 
 SchemaType.prototype = {
-
   __isYupSchema__: true,
 
   constructor: SchemaType,
 
   clone() {
-    if (this._mutate) { return this; }
+    if (this._mutate) {
+      return this;
+    }
 
     // if the nested value is a schema we can skip cloning, since
     // they are already immutable
-    return cloneDeepWith(this, (value) => {
+    return cloneDeepWith(this, value => {
       if (isSchema(value) && value !== this) {
         return value;
       }
@@ -87,7 +98,9 @@ SchemaType.prototype = {
   },
 
   meta(obj) {
-    if (arguments.length === 0) { return this._meta; }
+    if (arguments.length === 0) {
+      return this._meta;
+    }
 
     const next = this.clone();
     next._meta = Object.assign(next._meta || {}, obj);
@@ -102,21 +115,31 @@ SchemaType.prototype = {
   },
 
   concat(schema) {
-    if (!schema) { return this; }
+    if (!schema) {
+      return this;
+    }
 
-    if (schema._type !== this._type && this._type !== 'mixed') { throw new TypeError(`You cannot \`concat()\` schema's of different types: ${this._type} and ${schema._type}`); }
+    if (schema._type !== this._type && this._type !== 'mixed') {
+      throw new TypeError(
+        `You cannot \`concat()\` schema's of different types: ${
+          this._type
+        } and ${schema._type}`,
+      );
+    }
     const cloned = this.clone();
     let next = merge(this.clone(), schema.clone());
 
     // undefined isn't merged over, but is a valid value for default
-    if (has(schema, '_default')) { next._default = schema._default; }
+    if (has(schema, '_default')) {
+      next._default = schema._default;
+    }
 
     next.tests = cloned.tests;
     next._exclusive = cloned._exclusive;
 
     // manually add the new tests to ensure
     // the deduping logic is consistent
-    schema.tests.forEach((fn) => {
+    schema.tests.forEach(fn => {
       next = next.test(fn.TEST);
     });
 
@@ -132,8 +155,11 @@ SchemaType.prototype = {
 
   resolve({ context, parent }) {
     if (this._conditions.length) {
-      return this._conditions.reduce((schema, match) =>
-        match.resolve(schema, match.getValue(parent, context)), this);
+      return this._conditions.reduce(
+        (schema, match) =>
+          match.resolve(schema, match.getValue(parent, context)),
+        this,
+      );
     }
 
     return this;
@@ -150,19 +176,29 @@ SchemaType.prototype = {
     ) {
       const formattedValue = printValue(value);
       const formattedResult = printValue(result);
-      throw new TypeError(`${`The value of ${options.path || 'field'} could not be cast to a value ` +
-        `that satisfies the schema type: "${resolvedSchema._type}". \n\n` +
-        `attempted value: ${formattedValue} \n`}${
-        (formattedResult !== formattedValue)
-          ? `result of cast: ${formattedResult}` : ''}`);
+      throw new TypeError(
+        `${`The value of ${options.path ||
+          'field'} could not be cast to a value ` +
+          `that satisfies the schema type: "${resolvedSchema._type}". \n\n` +
+          `attempted value: ${formattedValue} \n`}${
+          formattedResult !== formattedValue
+            ? `result of cast: ${formattedResult}`
+            : ''
+        }`,
+      );
     }
 
     return result;
   },
 
   _cast(rawValue) {
-    let value = rawValue === undefined ? rawValue
-      : this.transforms.reduce((val, fn) => fn.call(this, val, rawValue), rawValue);
+    let value =
+      rawValue === undefined
+        ? rawValue
+        : this.transforms.reduce(
+            (val, fn) => fn.call(this, val, rawValue),
+            rawValue,
+          );
 
     if (value === undefined && has(this, '_default')) {
       value = this.default();
@@ -179,11 +215,13 @@ SchemaType.prototype = {
   validateSync(value, options = {}) {
     let result;
     let error;
-    this.validate(value, { ...options, sync: true }).then((res) => {
-      result = res;
-    }).catch((err) => {
-      error = err;
-    });
+    this.validate(value, { ...options, sync: true })
+      .then(res => {
+        result = res;
+      })
+      .catch(err => {
+        error = err;
+      });
     if (error) {
       throw error;
     }
@@ -192,7 +230,8 @@ SchemaType.prototype = {
 
   _validate(_value, options = {}) {
     let value = _value;
-    const originalValue = options.originalValue != null ? options.originalValue : _value;
+    const originalValue =
+      options.originalValue != null ? options.originalValue : _value;
 
     const isStrict = this._option('strict', options);
     const abortEarly = this._option('abortEarly', options);
@@ -216,11 +255,17 @@ SchemaType.prototype = {
     };
     const initialTests = [];
 
-    if (this._typeError) { initialTests.push(this._typeError(validationParams)); }
+    if (this._typeError) {
+      initialTests.push(this._typeError(validationParams));
+    }
 
-    if (this._whitelistError) { initialTests.push(this._whitelistError(validationParams)); }
+    if (this._whitelistError) {
+      initialTests.push(this._whitelistError(validationParams));
+    }
 
-    if (this._blacklistError) { initialTests.push(this._blacklistError(validationParams)); }
+    if (this._blacklistError) {
+      initialTests.push(this._blacklistError(validationParams));
+    }
 
     return runValidations({
       validations: initialTests,
@@ -228,22 +273,21 @@ SchemaType.prototype = {
       sync,
       value,
       path,
-    })
-      .then(val => runValidations({
+    }).then(val =>
+      runValidations({
         path,
         value: val,
         abortEarly,
         sync,
         validations: this.tests.map(fn => fn(validationParams)),
-      }));
+      }),
+    );
   },
 
-
   isValid(value, options) {
-    return this
-      .validate(value, options)
+    return this.validate(value, options)
       .then(() => true)
-      .catch((err) => {
+      .catch(err => {
         if (err.name === 'ValidationError') {
           return false;
         }
@@ -292,11 +336,7 @@ SchemaType.prototype = {
   },
 
   required(msg) {
-    return this.test(
-      'required',
-      msg || locale.required,
-      notEmpty,
-    );
+    return this.test('required', msg || locale.required, notEmpty);
   },
 
   nullable(value) {
@@ -332,25 +372,24 @@ SchemaType.prototype = {
 
     const validate = createValidation({ ...opts, sync });
 
-    const isExclusive = (
-      opts.exclusive ||
-      (opts.name && next._exclusive[opts.name] === true)
-    );
+    const isExclusive =
+      opts.exclusive || (opts.name && next._exclusive[opts.name] === true);
 
     if (opts.exclusive && !opts.name) {
-      throw new TypeError('Exclusive tests must provide a unique `name` identifying the test');
+      throw new TypeError(
+        'Exclusive tests must provide a unique `name` identifying the test',
+      );
     }
 
     next._exclusive[opts.name] = !!opts.exclusive;
 
-    next.tests = next.tests
-      .filter((fn) => {
-        if (fn.TEST_NAME === opts.name) {
-          if (isExclusive) return false;
-          if (fn.TEST.test === validate.TEST.test) return false;
-        }
-        return true;
-      });
+    next.tests = next.tests.filter(fn => {
+      if (fn.TEST_NAME === opts.name) {
+        if (isExclusive) return false;
+        if (fn.TEST.test === validate.TEST.test) return false;
+      }
+      return true;
+    });
 
     next.tests.push(validate);
 
@@ -361,8 +400,10 @@ SchemaType.prototype = {
     const next = this.clone();
     const deps = [].concat(keys).map(key => new Ref(key));
 
-    deps.forEach((dep) => {
-      if (!dep.isContext) { next._deps.push(dep.key); }
+    deps.forEach(dep => {
+      if (!dep.isContext) {
+        next._deps.push(dep.key);
+      }
     });
 
     next._conditions.push(new Condition(deps, options));
@@ -393,8 +434,10 @@ SchemaType.prototype = {
   oneOf(enums, message = locale.oneOf) {
     const next = this.clone();
 
-    enums.forEach((val) => {
-      if (next._blacklist.has(val)) { next._blacklist.delete(val); }
+    enums.forEach(val => {
+      if (next._blacklist.has(val)) {
+        next._blacklist.delete(val);
+      }
       next._whitelist.add(val);
     });
 
@@ -420,7 +463,7 @@ SchemaType.prototype = {
   notOneOf(enums, message = locale.notOneOf) {
     const next = this.clone();
 
-    enums.forEach((val) => {
+    enums.forEach(val => {
       next._whitelist.delete(val);
       next._blacklist.add(val);
     });
@@ -451,8 +494,7 @@ SchemaType.prototype = {
   },
 
   _option(key, overrides) {
-    return has(overrides, key)
-      ? overrides[key] : this._options[key];
+    return has(overrides, key) ? overrides[key] : this._options[key];
   },
 
   describe() {
@@ -467,14 +509,13 @@ SchemaType.prototype = {
   },
 };
 
-
 const aliases = {
   oneOf: ['equals', 'is'],
   notOneOf: ['not', 'nope'],
 };
 
-Object.keys(aliases).forEach((method) => {
-  aliases[method].forEach((alias) => {
+Object.keys(aliases).forEach(method => {
+  aliases[method].forEach(alias => {
     SchemaType.prototype[alias] = SchemaType.prototype[method];
   });
 });

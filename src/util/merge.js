@@ -6,7 +6,7 @@ import isPlainObject from 'lodash/isPlainObject';
 import isSchema from './isSchema';
 
 export default function merge(target, source) {
-  Object.keys(source).forEach((key) => {
+  Object.keys(source).forEach(key => {
     if (!has(source, key)) {
       return;
     }

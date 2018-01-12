@@ -1,8 +1,10 @@
 /* eslint-disable no-param-reassign */
 import { getter } from 'property-expr';
 
-const validateName = (d) => {
-  if (typeof d !== 'string') { throw new TypeError(`ref's must be strings, got: ${d}`); }
+const validateName = d => {
+  if (typeof d !== 'string') {
+    throw new TypeError(`ref's must be strings, got: ${d}`);
+  }
 };
 
 export default class Reference {
@@ -37,7 +39,7 @@ export default class Reference {
 
   getValue(parent, context) {
     const { isContext } = this;
-    const value = this._get(isContext ? context : (parent || context) || {});
+    const value = this._get(isContext ? context : parent || context || {});
     return this.map(value);
   }
 }
