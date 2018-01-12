@@ -17,7 +17,9 @@ export default function DateSchema() {
 
   this.withMutation(() => {
     this.transform(function transform(value) {
-      if (this.isType(value)) { return isDate(value) ? new Date(value) : value; }
+      if (this.isType(value)) {
+        return isDate(value) ? new Date(value) : value;
+      }
 
       value = isoParse(value);
       return value ? new Date(value) : invalidDate;
@@ -26,7 +28,6 @@ export default function DateSchema() {
 }
 
 inherits(DateSchema, MixedSchema, {
-
   _typeCheck(v) {
     return isDate(v) && !Number.isNaN(Number(v.getTime()));
   },
@@ -36,7 +37,11 @@ inherits(DateSchema, MixedSchema, {
 
     if (!Ref.isRef(limit)) {
       limit = this.cast(min);
-      if (!this._typeCheck(limit)) { throw new TypeError('`min` must be a Date or a value that can be `cast()` to a Date'); }
+      if (!this._typeCheck(limit)) {
+        throw new TypeError(
+          '`min` must be a Date or a value that can be `cast()` to a Date',
+        );
+      }
     }
 
     return this.test({
@@ -55,7 +60,11 @@ inherits(DateSchema, MixedSchema, {
 
     if (!Ref.isRef(limit)) {
       limit = this.cast(max);
-      if (!this._typeCheck(limit)) { throw new TypeError('`max` must be a Date or a value that can be `cast()` to a Date'); }
+      if (!this._typeCheck(limit)) {
+        throw new TypeError(
+          '`max` must be a Date or a value that can be `cast()` to a Date',
+        );
+      }
     }
 
     return this.test({
@@ -68,5 +77,4 @@ inherits(DateSchema, MixedSchema, {
       },
     });
   },
-
 });

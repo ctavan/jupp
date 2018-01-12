@@ -2,9 +2,8 @@ import printValue from './util/printValue';
 
 const strReg = /\$\{\s*(\w+)\s*\}/g;
 
-const replace = str =>
-  params => str.replace(strReg, (_, key) => printValue(params[key]));
-
+const replace = str => params =>
+  str.replace(strReg, (_, key) => printValue(params[key]));
 
 export default function ValidationError(errors, value, field, type) {
   this.name = 'ValidationError';
@@ -15,18 +14,23 @@ export default function ValidationError(errors, value, field, type) {
   this.inner = [];
 
   if (errors) {
-    [].concat(errors).forEach((err) => {
+    [].concat(errors).forEach(err => {
       this.errors = this.errors.concat(err.errors || err);
 
-      if (err.inner) { this.inner = this.inner.concat(err.inner.length ? err.inner : err); }
+      if (err.inner) {
+        this.inner = this.inner.concat(err.inner.length ? err.inner : err);
+      }
     });
   }
 
-  this.message = this.errors.length > 1
-    ? `${this.errors.length} errors occurred`
-    : this.errors[0];
+  this.message =
+    this.errors.length > 1
+      ? `${this.errors.length} errors occurred`
+      : this.errors[0];
 
-  if (Error.captureStackTrace) { Error.captureStackTrace(this, ValidationError); }
+  if (Error.captureStackTrace) {
+    Error.captureStackTrace(this, ValidationError);
+  }
 }
 
 ValidationError.prototype = Object.create(Error.prototype);
@@ -37,7 +41,8 @@ ValidationError.isError = function isError(err) {
 };
 
 ValidationError.formatError = function formatError(message, params) {
-  const messageFunction = (typeof message === 'string') ? replace(message) : message;
+  const messageFunction =
+    typeof message === 'string' ? replace(message) : message;
 
   const fn = ({ path, label, ...rest }) => {
     const parameters = { ...rest, path: label || path || 'this' };

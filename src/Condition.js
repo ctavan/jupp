@@ -2,7 +2,9 @@ import has from 'lodash/has';
 import isSchema from './util/isSchema';
 
 function callOrConcat(schema) {
-  if (typeof schema === 'function') { return schema; }
+  if (typeof schema === 'function') {
+    return schema;
+  }
 
   return base => base.concat(schema);
 }
@@ -17,17 +19,23 @@ class Conditional {
     then = callOrConcat(then);
     otherwise = callOrConcat(otherwise);
 
-    if (typeof options === 'function') { this.fn = options; } else {
+    if (typeof options === 'function') {
+      this.fn = options;
+    } else {
       if (!has(options, 'is')) {
         throw new TypeError('`is:` is required for `when()` conditions');
       }
 
       if (!options.then && !options.otherwise) {
-        throw new TypeError('either `then:` or `otherwise:` is required for `when()` conditions');
+        throw new TypeError(
+          'either `then:` or `otherwise:` is required for `when()` conditions',
+        );
       }
 
-      const isFn = typeof is === 'function'
-        ? is : ((...values) => values.every(value => value === is));
+      const isFn =
+        typeof is === 'function'
+          ? is
+          : (...values) => values.every(value => value === is);
 
       this.fn = function fn(...values) {
         const currentSchema = values.pop();
