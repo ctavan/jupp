@@ -21,7 +21,7 @@ export default function sortFields(fields, excludes = []) {
     }
   }
 
-  Object.keys(fields).forEach((key) => {
+  Object.keys(fields).forEach(key => {
     if (!has(fields, key)) {
       return;
     }

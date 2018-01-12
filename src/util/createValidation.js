@@ -11,13 +11,7 @@ function resolveParams(oldParams, newParams, resolve) {
   return mapValues({ ...oldParams, ...newParams }, resolve);
 }
 
-function createErrorFactory({
-  value,
-  label,
-  resolve,
-  originalValue,
-  ...opts
-}) {
+function createErrorFactory({ value, label, resolve, originalValue, ...opts }) {
   return function createError({
     path = opts.path,
     message = opts.message,
@@ -33,24 +27,14 @@ function createErrorFactory({
     };
 
     return Object.assign(
-      new ValidationError(
-        formatError(message, params)
-        , value
-        , path
-        , type,
-      )
-      , { params },
+      new ValidationError(formatError(message, params), value, path, type),
+      { params },
     );
   };
 }
 
 export default function createValidation(options) {
-  const {
-    name,
-    message,
-    test,
-    params,
-  } = options;
+  const { name, message, test, params } = options;
 
   function validate({
     value,
@@ -63,7 +47,8 @@ export default function createValidation(options) {
   }) {
     const sync = options.sync || validateSync;
     const { parent } = validateOptions;
-    const resolve = val => (Ref.isRef(val) ? val.getValue(parent, validateOptions.context) : val);
+    const resolve = val =>
+      Ref.isRef(val) ? val.getValue(parent, validateOptions.context) : val;
 
     const createError = createErrorFactory({
       message,
@@ -88,7 +73,7 @@ export default function createValidation(options) {
 
     return getPromise(sync)
       .resolve(test.call(ctx, value))
-      .then((validOrError) => {
+      .then(validOrError => {
         if (ValidationError.isError(validOrError)) {
           throw validOrError;
         } else if (!validOrError) {

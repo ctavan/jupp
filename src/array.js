@@ -10,11 +10,12 @@ import MixedSchema from './mixed';
 import { mixed, array as locale } from './locale';
 import runValidations, { propagateErrors } from './util/runValidations';
 
-
 const hasLength = value => !isAbsent(value) && value.length > 0;
 
 export default function ArraySchema(type) {
-  if (!(this instanceof ArraySchema)) { return new ArraySchema(type); }
+  if (!(this instanceof ArraySchema)) {
+    return new ArraySchema(type);
+  }
 
   MixedSchema.call(this, { type: 'array' });
 
@@ -27,18 +28,21 @@ export default function ArraySchema(type) {
       if (typeof values === 'string') {
         try {
           values = JSON.parse(values);
-        } catch (err) { values = null; }
+        } catch (err) {
+          values = null;
+        }
       }
 
       return this.isType(values) ? values : null;
     });
 
-    if (type) { this.of(type); }
+    if (type) {
+      this.of(type);
+    }
   });
 }
 
 inherits(ArraySchema, MixedSchema, {
-
   _typeCheck(v) {
     return isArray(v);
   },
@@ -47,7 +51,9 @@ inherits(ArraySchema, MixedSchema, {
     const value = MixedSchema.prototype._cast.call(this, _value, _opts);
 
     // should ignore nulls here
-    if (!this._typeCheck(value) || !this._subType) { return value; }
+    if (!this._typeCheck(value) || !this._subType) {
+      return value;
+    }
 
     return value.map(v => this._subType.cast(v, _opts));
   },
@@ -60,13 +66,13 @@ inherits(ArraySchema, MixedSchema, {
     const recursive = this._option('recursive', options);
     const sync = this._option('sync', options);
 
-    let originalValue = options.originalValue != null ?
-      options.originalValue : _value;
+    let originalValue =
+      options.originalValue != null ? options.originalValue : _value;
 
     return MixedSchema.prototype._validate
       .call(this, _value, options)
       .catch(propagateErrors(abortEarly, errors))
-      .then((value) => {
+      .then(value => {
         if (!recursive || !subType || !this._typeCheck(value)) {
           if (errors.length) throw errors[0];
           return value;
@@ -86,7 +92,9 @@ inherits(ArraySchema, MixedSchema, {
             originalValue: originalValue[idx],
           };
 
-          if (subType.validate) { return subType.validate(item, innerOptions); }
+          if (subType.validate) {
+            return subType.validate(item, innerOptions);
+          }
 
           return true;
         });
@@ -106,8 +114,10 @@ inherits(ArraySchema, MixedSchema, {
     const next = this.clone();
 
     if (schema !== false && !isSchema(schema)) {
-      throw new TypeError(`${'`array.of()` sub-schema must be a valid jupp schema, or `false` to negate a current sub-schema. ' +
-        'not: '}${typeName(schema)}`);
+      throw new TypeError(
+        `${'`array.of()` sub-schema must be a valid jupp schema, or `false` to negate a current sub-schema. ' +
+          'not: '}${typeName(schema)}`,
+      );
     }
 
     next._subType = schema;
@@ -116,13 +126,12 @@ inherits(ArraySchema, MixedSchema, {
   },
 
   required(msg) {
-    const next = MixedSchema.prototype.required.call(this, msg || mixed.required);
-
-    return next.test(
-      'required'
-      , msg || mixed.required
-      , hasLength,
+    const next = MixedSchema.prototype.required.call(
+      this,
+      msg || mixed.required,
     );
+
+    return next.test('required', msg || mixed.required, hasLength);
   },
 
   min(min, message) {
@@ -153,16 +162,16 @@ inherits(ArraySchema, MixedSchema, {
   },
 
   ensure() {
-    return this
-      .default(() => [])
-      .transform(val => (val === null ? [] : [].concat(val)));
+    return this.default(() => []).transform(
+      val => (val === null ? [] : [].concat(val)),
+    );
   },
 
   compact(rejector) {
-    const reject = !rejector
-      ? v => !!v
-      : (v, i, a) => !rejector(v, i, a);
+    const reject = !rejector ? v => !!v : (v, i, a) => !rejector(v, i, a);
 
-    return this.transform(values => (values != null ? values.filter(reject) : values));
+    return this.transform(
+      values => (values != null ? values.filter(reject) : values),
+    );
   },
 });

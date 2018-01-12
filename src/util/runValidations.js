@@ -2,14 +2,12 @@ import getPromise from './getPromise';
 import ValidationError from '../ValidationError';
 
 const unwrapError = (errors = []) =>
-  (errors.inner && errors.inner.length
-    ? errors.inner
-    : [].concat(errors));
+  errors.inner && errors.inner.length ? errors.inner : [].concat(errors);
 
 function scopeToValue({ validations, value, sync }) {
   return getPromise(sync)
     .all(validations)
-    .catch((err) => {
+    .catch(err => {
       if (err.name === 'ValidationError') {
         err.value = value; // eslint-disable-line no-param-reassign
       }
@@ -23,21 +21,23 @@ function scopeToValue({ validations, value, sync }) {
  * and collect them in an array
  */
 export function propagateErrors(abortEarly, errors) {
-  return abortEarly ? null : (err) => {
-    errors.push(err);
-    return err.value;
-  };
+  return abortEarly
+    ? null
+    : err => {
+        errors.push(err);
+        return err.value;
+      };
 }
 
 export function settled(promises, sync) {
-  const settle = promise => promise.then(
-    value => ({ fulfilled: true, value }),
-    value => ({ fulfilled: false, value }),
-  );
+  const settle = promise =>
+    promise.then(
+      value => ({ fulfilled: true, value }),
+      value => ({ fulfilled: false, value }),
+    );
 
   return getPromise(sync).all(promises.map(settle));
 }
-
 
 export function collectErrors({
   validations,
@@ -47,7 +47,7 @@ export function collectErrors({
   sort,
   sync,
 }) {
-  return settled(validations, sync).then((results) => {
+  return settled(validations, sync).then(results => {
     const nestedErrors = results
       .filter(r => !r.fulfilled)
       .reduce((arr, { value: error }) => {
@@ -72,7 +72,6 @@ export function collectErrors({
     return value;
   });
 }
-
 
 export default function runValidations({ abortEarly, ...options }) {
   if (abortEarly) {
