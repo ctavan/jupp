@@ -18,7 +18,7 @@ export default function parseIsoDate(date) {
   }
 
   // avoid NaN timestamps caused by “undefined” values being passed to Date.UTC
-  numericKeys.forEach((k) => {
+  numericKeys.forEach(k => {
     struct[k] = Number(struct[k]) || 0;
   });
 
@@ -30,21 +30,25 @@ export default function parseIsoDate(date) {
   struct[7] = struct[7] ? String(struct[7]).substr(0, 3) : 0;
 
   // timestamps without timezone identifiers should be considered local time
-  if ((struct[8] === undefined || struct[8] === '') &&
-      (struct[9] === undefined || struct[9] === '')) {
-    return Number(new Date(
-      struct[1],
-      struct[2],
-      struct[3],
-      struct[4],
-      struct[5],
-      struct[6],
-      struct[7],
-    ));
+  if (
+    (struct[8] === undefined || struct[8] === '') &&
+    (struct[9] === undefined || struct[9] === '')
+  ) {
+    return Number(
+      new Date(
+        struct[1],
+        struct[2],
+        struct[3],
+        struct[4],
+        struct[5],
+        struct[6],
+        struct[7],
+      ),
+    );
   }
 
   if (struct[8] !== 'Z' && struct[9] !== undefined) {
-    minutesOffset = (struct[10] * 60) + struct[11];
+    minutesOffset = struct[10] * 60 + struct[11];
 
     if (struct[9] === '+') {
       minutesOffset = 0 - minutesOffset;

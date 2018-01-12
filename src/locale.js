@@ -6,19 +6,18 @@ export const mixed = {
   required: '${path} is a required field',
   oneOf: '${path} must be one of the following values: ${values}',
   notOneOf: '${path} must not be one of the following values: ${values}',
-  notType: ({
-    path,
-    type,
-    value,
-    originalValue,
-  }) => {
+  notType: ({ path, type, value, originalValue }) => {
     const isCast = originalValue != null && originalValue !== value;
     let msg = `${`${path} must be a \`${type}\` type, ` +
-      `but the final value was: \`${printValue(value, true)}\``}${isCast ?
-      ` (cast from the value \`${printValue(originalValue, true)}\`).` : '.'}`;
+      `but the final value was: \`${printValue(value, true)}\``}${
+      isCast
+        ? ` (cast from the value \`${printValue(originalValue, true)}\`).`
+        : '.'
+    }`;
 
     if (value === null) {
-      msg += '\n If "null" is intended as an empty value be sure to mark the schema as `.nullable()`';
+      msg +=
+        '\n If "null" is intended as an empty value be sure to mark the schema as `.nullable()`';
     }
 
     return msg;
@@ -50,8 +49,7 @@ export const date = {
   max: '${path} field must be at earlier than ${max}',
 };
 
-export const boolean = {
-};
+export const boolean = {};
 
 export const object = {
   noUnknown: '${path} field cannot have keys not specified in the object shape',

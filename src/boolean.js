@@ -3,7 +3,9 @@ import inherits from './util/inherits';
 import MixedSchema from './mixed';
 
 export default function BooleanSchema() {
-  if (!(this instanceof BooleanSchema)) { return new BooleanSchema(); }
+  if (!(this instanceof BooleanSchema)) {
+    return new BooleanSchema();
+  }
 
   MixedSchema.call(this, { type: 'boolean' });
 
