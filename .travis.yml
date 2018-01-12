@@ -17,4 +17,5 @@ before_script:
 after_script:
   - greenkeeper-lockfile-upload
 after_success:
+  - echo "//registry.npmjs.org/:_authToken=\${NPM_TOKEN}" > .npmrc
   - yarn run semantic-release
