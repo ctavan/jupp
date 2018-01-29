@@ -18,9 +18,7 @@
     "test": "yarn run lint && yarn run jest",
     "toc": "doctoc README.md --github"
   },
-  "files": [
-    "lib"
-  ],
+  "files": ["lib"],
   "repository": {
     "type": "git",
     "url": "https://github.com/ctavan/jupp.git"
@@ -33,20 +31,12 @@
   "homepage": "https://github.com/ctavan/jupp",
   "jest": {
     "setupTestFrameworkScriptFile": "./test-setup.js",
-    "roots": [
-      "test"
-    ],
+    "roots": ["test"],
     "testRegex": "\\.js",
-    "testPathIgnorePatterns": [
-      "helpers\\.js"
-    ]
+    "testPathIgnorePatterns": ["helpers\\.js"]
   },
   "lint-staged": {
-    "*.js": [
-      "yarn run toc",
-      "yarn prettier",
-      "git add"
-    ]
+    "*.js": ["yarn run toc", "yarn prettier", "git add"]
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
