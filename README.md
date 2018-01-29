@@ -164,7 +164,7 @@ Allows you to customize the default messages used by Jupp, when no message is pr
 If any message is missing in the custom dictionary the error message will default to Jupp's one.
 
 ```js
-import setLocale from 'jupp/lib/customLocale';
+import setLocale from 'jupp';
 
 setLocale({
   mixed: {
