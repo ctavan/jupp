@@ -1,11 +1,27 @@
 /* eslint-disable no-param-reassign */
 import mapValues from 'lodash/mapValues';
-
-import getPromise from './getPromise';
+import { SynchronousPromise } from 'synchronous-promise';
 import Ref from '../Reference';
 import ValidationError from '../ValidationError';
 
 const { formatError } = ValidationError;
+
+const thenable = p =>
+  p && typeof p.then === 'function' && typeof p.catch === 'function';
+
+function runTest(testFn, ctx, value, sync) {
+  const result = testFn.call(ctx, value);
+  if (!sync) return Promise.resolve(result);
+
+  if (thenable(result)) {
+    throw new Error(
+      `Validation test of type: "${ctx.type}" ` +
+        'returned a Promise during a synchronous validate. ' +
+        'This test will finish after the validate call has returned',
+    );
+  }
+  return SynchronousPromise.resolve(result);
+}
 
 function resolveParams(oldParams, newParams, resolve) {
   return mapValues({ ...oldParams, ...newParams }, resolve);
@@ -71,15 +87,13 @@ export default function createValidation(options) {
       ...rest,
     };
 
-    return getPromise(sync)
-      .resolve(test.call(ctx, value))
-      .then(validOrError => {
-        if (ValidationError.isError(validOrError)) {
-          throw validOrError;
-        } else if (!validOrError) {
-          throw createError();
-        }
-      });
+    return runTest(test, ctx, value, sync).then(validOrError => {
+      if (ValidationError.isError(validOrError)) {
+        throw validOrError;
+      } else if (!validOrError) {
+        throw createError();
+      }
+    });
   }
 
   validate.TEST_NAME = name;
