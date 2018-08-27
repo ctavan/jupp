@@ -72,7 +72,7 @@
     "lint-staged": "^6.0.0",
     "prettier": "^1.10.2",
     "promises-aplus-tests": "^2.1.2",
-    "semantic-release": "^12.4.1",
+    "semantic-release": "^15.9.12",
     "sinon": "^4.0.0",
     "sinon-chai": "^2.14.0"
   },
